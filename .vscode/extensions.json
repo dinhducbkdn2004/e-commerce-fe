@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    // Essential for React/TypeScript development
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "ms-vscode.vscode-eslint",
+
+    // React specific
+    "dsznajder.es7-react-js-snippets",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+
+    // General productivity
+    "ms-vscode.vscode-json",
+    "yzhang.markdown-all-in-one",
+    "ms-vscode.vscode-typescript-next",
+    "usernamehw.errorlens",
+
+    // Git
+    "eamodio.gitlens",
+
+    // Theme and icons
+    "pkief.material-icon-theme",
+    "ms-vscode.vscode-theme-generator"
+  ]
+}

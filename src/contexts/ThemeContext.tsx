@@ -1,65 +1,66 @@
 import { createContext, useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
 
-type Theme = 'light' | 'dark'
+type Theme = 'dark' | 'light' | 'system'
 
-interface ThemeContextType {
+type ThemeProviderProps = {
+  children: React.ReactNode
+  defaultTheme?: Theme
+  storageKey?: string
+}
+
+type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
-  toggleTheme: () => void
-  isDark: boolean
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
-
-interface ThemeProviderProps {
-  children: ReactNode
+const initialState: ThemeProviderState = {
+  theme: 'system',
+  setTheme: () => null,
 }
 
-// Helper function to check if we're in browser
-const isBrowser = typeof window !== 'undefined'
+const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-// Get initial theme from localStorage or default to 'light'
-const getInitialTheme = (): Theme => {
-  if (!isBrowser) return 'light'
-  const savedTheme = localStorage.getItem('theme') as Theme
-  return savedTheme || 'light'
-}
+export { ThemeProviderContext }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme)
-  const [isDark, setIsDark] = useState(() => getInitialTheme() === 'dark')
+export function ThemeProvider({
+  children,
+  defaultTheme = 'system',
+  storageKey = 'vite-ui-theme',
+  ...props
+}: ThemeProviderProps) {
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+  )
 
-  // Handle theme changes and DOM updates
   useEffect(() => {
-    if (!isBrowser) return
+    const root = window.document.documentElement
 
-    const root = document.documentElement
+    root.classList.remove('light', 'dark')
 
-    // Remove existing theme classes
-    root.classList.remove('dark')
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
+        ? 'dark'
+        : 'light'
 
-    const shouldBeDark = theme === 'dark'
-
-    if (shouldBeDark) {
-      root.classList.add('dark')
+      root.classList.add(systemTheme)
+      return
     }
 
-    setIsDark(shouldBeDark)
-
-    // Always save theme to localStorage
-    localStorage.setItem('theme', theme)
+    root.classList.add(theme)
   }, [theme])
 
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
+  const value = {
+    theme,
+    setTheme: (theme: Theme) => {
+      localStorage.setItem(storageKey, theme)
+      setTheme(theme)
+    },
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme, isDark }}>
+    <ThemeProviderContext.Provider {...props} value={value}>
       {children}
-    </ThemeContext.Provider>
+    </ThemeProviderContext.Provider>
   )
 }
-
-export { ThemeContext }

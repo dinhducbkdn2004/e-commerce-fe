@@ -1,36 +1,38 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/images/logo/BeeLuxe-logo-transparent.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeeLuxe</title>
+    <script>
+      // Prevent FOUC by setting theme before page renders
+      ;(function () {
+        try {
+          const theme = localStorage.getItem('theme')
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>E-commerce Store</title>
-  <script>
-    // Prevent FOUC by setting theme before page renders
-    (function () {
-      try {
-        const theme = localStorage.getItem('theme');
-
-        // Add dark class only if theme is explicitly set to 'dark'
-        // Default to light if no theme is saved or if there's an error
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          // Ensure dark class is removed if theme is light or null
-          document.documentElement.classList.remove('dark');
+          // Add dark class only if theme is explicitly set to 'dark'
+          // Default to light if no theme is saved or if there's an error
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark')
+          } else {
+            // Ensure dark class is removed if theme is light or null
+            document.documentElement.classList.remove('dark')
+          }
+        } catch (e) {
+          // If localStorage is not available, default to light mode
+          document.documentElement.classList.remove('dark')
         }
-      } catch (e) {
-        // If localStorage is not available, default to light mode
-        document.documentElement.classList.remove('dark');
-      }
-    })();
-  </script>
-</head>
+      })()
+    </script>
+  </head>
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

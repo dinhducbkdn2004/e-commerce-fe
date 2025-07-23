@@ -1,0 +1,28 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Diamond Logo -->
+  <g transform="translate(0, 8)">
+    <!-- Outer diamond with gradient -->
+    <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="url(#gradient1)" />
+    <!-- Inner diamond cutout -->
+    <path d="M12 6 L18 12 L12 18 L6 12 Z" fill="white" />
+    <!-- Center small diamond -->
+    <path d="M12 9 L15 12 L12 15 L9 12 Z" fill="url(#gradient2)" />
+  </g>
+
+  <!-- BeeLuxe Text -->
+  <text x="32" y="28" font-family="'Inter', 'SF Pro Display', -apple-system, sans-serif" font-size="18" font-weight="300" letter-spacing="0.5px" fill="currentColor">
+    Bee<tspan font-weight="600">Luxe</tspan>
+  </text>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

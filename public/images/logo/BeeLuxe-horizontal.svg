@@ -1,0 +1,40 @@
+<svg width="160" height="60" viewBox="0 0 160 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horizontal Logo with Text -->
+  <g transform="translate(10, 15)">
+    <!-- Diamond Icon -->
+    <g transform="rotate(45)">
+      <!-- Main diamond -->
+      <rect x="-10" y="-10" width="20" height="20" fill="url(#horizontalGradient1)" rx="2" />
+      <!-- Inner diamond -->
+      <rect x="-6" y="-6" width="12" height="12" fill="white" rx="1" />
+      <!-- Center gem -->
+      <rect x="-3" y="-3" width="6" height="6" fill="url(#horizontalGradient2)" rx="0.5" />
+    </g>
+  </g>
+
+  <!-- BeeLuxe Text with better spacing -->
+  <g transform="translate(50, 20)">
+    <!-- Bee text -->
+    <text x="0" y="18" font-family="'Inter', 'SF Pro Display', sans-serif" font-size="24" font-weight="300" letter-spacing="1px" fill="currentColor">
+      Bee
+    </text>
+    <!-- Luxe text -->
+    <text x="46" y="18" font-family="'Inter', 'SF Pro Display', sans-serif" font-size="24" font-weight="600" letter-spacing="1px" fill="currentColor">
+      Luxe
+    </text>
+    <!-- Subtle underline accent -->
+    <line x1="0" y1="24" x2="90" y2="24" stroke="url(#horizontalGradient1)" stroke-width="2" opacity="0.3" />
+  </g>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="horizontalGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="horizontalGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

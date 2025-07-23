@@ -1,0 +1,6 @@
+export { default as CategorySection } from './CategorySection'
+export { default as FavoritesSection } from './FavoritesSection'
+export { default as FeatureSection } from './FeatureSection'
+export { default as HeroSection } from './HeroSection'
+export { default as SaleSection } from './SaleSection'
+export { default as TestimonialSection } from './TestimonialSection'

@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer
       aria-labelledby='footer-heading'
-      className='border-t mt-16 lg:mt-20 border-gray-900/10 dark:border-gray-700'
+      className='border-t border-gray-900/10 dark:border-gray-700'
     >
       <h2 id='footer-heading' className='sr-only'>
         Footer

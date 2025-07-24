@@ -20,7 +20,7 @@ export default function CategorySection() {
         </div>
         <div className='mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8'>
           {/* New Arrivals - Featured Category */}
-          <div className='group aspect-w-2 aspect-h-1 overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-1 sm:row-span-2'>
+          <div className='group aspect-w-2 aspect-h-1 overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-1 sm:row-span-2 relative'>
             <img
               alt="Two models wearing women's black cotton crewneck tee and off-white cotton crewneck tee."
               src='https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-featured-category.jpg'
@@ -32,13 +32,16 @@ export default function CategorySection() {
             ></div>
             <div className='flex items-end p-6'>
               <div>
-                <h3 className='font-semibold text-white'>
+                <h3 className='font-semibold text-white '>
                   <Link to='/new-arrivals'>
                     <span className='absolute inset-0'></span>
                     New Arrivals
                   </Link>
                 </h3>
-                <p aria-hidden='true' className='mt-1 text-sm text-white'>
+                <p
+                  aria-hidden='true'
+                  className='mt-1 text-sm text-white relative z-10'
+                >
                   Shop now
                 </p>
               </div>

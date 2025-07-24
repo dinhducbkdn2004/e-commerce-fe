@@ -83,7 +83,7 @@ export default function HeroSection() {
 
               <Link
                 to='/collection'
-                className='inline-flex items-center rounded-md border border-transparent bg-gray-900 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 transition-colors'
+                className='inline-flex items-center dark:bg-indigo-600 hover:dark:bg-indigo-500 rounded-md border border-transparent bg-gray-900 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 transition-colors'
               >
                 Shop Collection
               </Link>

@@ -1,8 +1,9 @@
 import { MainLayout } from '@/layouts'
 import { ThemeProvider } from '@contexts/ThemeContext'
-import { LoginPage, RegisterPage } from '@features/auth/components/index'
 import Home from '@pages/Home/Home'
+import LoginPage from '@pages/LoginPage/LoginPage'
 import NotFound from '@pages/NotFound/NotFound'
+import RegisterPage from '@pages/RegisterPage/RegisterPage'
 import { Route, Routes } from 'react-router-dom'
 
 function App() {

@@ -69,11 +69,21 @@ export interface LoginForm {
   password: string
 }
 
-export interface RegisterForm {
+// Form types (cho UI)
+export interface RegisterFormData {
   name: string
   email: string
   password: string
   confirmPassword: string
+  phoneNumber: string
+}
+
+// API types (cho API calls)
+export interface RegisterApiRequest {
+  email: string
+  password: string
+  name: string
+  phoneNumber: string
 }
 
 export interface ForgotPasswordForm {

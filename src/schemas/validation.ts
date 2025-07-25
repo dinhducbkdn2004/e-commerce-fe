@@ -33,6 +33,7 @@ export const validateRegisterForm = (data: {
   email: string
   password: string
   confirmPassword: string
+  phoneNumber: string
 }): ValidationResult => {
   const errors: string[] = []
 
@@ -66,6 +67,12 @@ export const validateRegisterForm = (data: {
     errors.push('Please confirm your password')
   } else if (data.password !== data.confirmPassword) {
     errors.push('Passwords do not match')
+  }
+
+  if (!data.phoneNumber) {
+    errors.push('Phone number is required')
+  } else if (!/^\+?[\d\s\-()]{10,}$/.test(data.phoneNumber)) {
+    errors.push('Please enter a valid phone number')
   }
 
   return {

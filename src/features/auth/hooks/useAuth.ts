@@ -1,5 +1,10 @@
 import { authService } from '@/services'
-import type { LoginForm, RegisterForm, User } from '@/types'
+import type {
+  LoginForm,
+  RegisterApiRequest,
+  RegisterFormData,
+  User,
+} from '@/types'
 import { useState } from 'react'
 
 export const useAuth = () => {
@@ -22,12 +27,21 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (userData: RegisterForm) => {
+  // ...existing code...
+  const register = async (formData: RegisterFormData) => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const result = await authService.register(userData)
+      // Transform form data to API format
+      const apiData: RegisterApiRequest = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+      }
+
+      const result = await authService.register(apiData)
       return result
     } catch (err) {
       const errorMessage =
@@ -38,6 +52,7 @@ export const useAuth = () => {
       setIsLoading(false)
     }
   }
+  // ...existing code...
 
   const logout = async () => {
     setIsLoading(true)

@@ -3,7 +3,7 @@ import type {
   ApiResponse,
   LoginForm,
   LoginResponse,
-  RegisterForm,
+  RegisterApiRequest,
   User,
 } from '@/types'
 import { storage } from '@/utils'
@@ -28,7 +28,7 @@ class AuthService {
     throw new Error('Login failed')
   }
 
-  async register(userData: RegisterForm): Promise<User> {
+  async register(userData: RegisterApiRequest): Promise<User> {
     const response = (await authApi.register(userData)) as ApiResponse<{
       user: User
     }>

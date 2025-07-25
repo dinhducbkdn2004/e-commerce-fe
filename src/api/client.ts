@@ -1,52 +1,80 @@
 import { env } from '@/config'
+import axios from 'axios'
+
+// Custom error class for API errors
+class ApiError extends Error {
+  public status?: number
+  public originalError: unknown
+
+  constructor(message: string, status?: number, originalError?: unknown) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.originalError = originalError
+  }
+}
 
 // Base API client configuration
 class ApiClient {
-  private baseURL: string
-  private defaultHeaders: Record<string, string>
+  private client: ReturnType<typeof axios.create>
 
   constructor() {
-    this.baseURL = env.BASE_URL_API
-    this.defaultHeaders = {
-      'Content-Type': 'application/json',
-    }
-  }
-
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`
-
-    const config: RequestInit = {
+    this.client = axios.create({
+      baseURL: env.BASE_URL_API,
       headers: {
-        ...this.defaultHeaders,
-        ...options.headers,
+        'Content-Type': 'application/json',
       },
-      ...options,
-    }
+    })
 
-    // Add auth token if available
-    const token = this.getToken()
-    if (token) {
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
+    // Setup request interceptor to add auth token
+    this.client.interceptors.request.use(
+      config => {
+        const token = this.getToken()
+        if (token && config.headers) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+      },
+      error => Promise.reject(error)
+    )
+
+    // Setup response interceptor for error handling
+    this.client.interceptors.response.use(
+      response => response,
+      error => {
+        // Extract meaningful error message from backend response
+        const backendError = error.response?.data
+        let errorMessage = 'Request failed'
+
+        if (backendError) {
+          // Handle different backend error response formats
+          if (backendError.message) {
+            errorMessage = backendError.message
+          } else if (backendError.error) {
+            errorMessage = backendError.error
+          } else if (typeof backendError === 'string') {
+            errorMessage = backendError
+          }
+        }
+
+        // Create a new error with the meaningful message
+        const meaningfulError = new ApiError(
+          errorMessage,
+          error.response?.status,
+          error
+        )
+
+        console.error('API request failed:', {
+          url: error.config?.url,
+          method: error.config?.method,
+          status: error.response?.status,
+          message: errorMessage,
+          data: backendError,
+        })
+
+        return Promise.reject(meaningfulError)
       }
-    }
-
-    try {
-      const response = await fetch(url, config)
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      return await response.json()
-    } catch (error) {
-      console.error('API request failed:', error)
-      throw error
-    }
+    )
   }
 
   private getToken(): string | null {
@@ -55,26 +83,25 @@ class ApiClient {
 
   // HTTP methods
   async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' })
+    const response = await this.client.get(endpoint)
+    return response.data as T
   }
 
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
-    })
+    const response = await this.client.post(endpoint, data)
+    return response.data as T
   }
 
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
-    })
+    const response = await this.client.put(endpoint, data)
+    return response.data as T
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' })
+    const response = await this.client.delete(endpoint)
+    return response.data as T
   }
 }
 
 export const apiClient = new ApiClient()
+export { ApiError }

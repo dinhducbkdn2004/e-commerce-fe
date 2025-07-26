@@ -13,12 +13,15 @@ import { cn } from '@/lib/utils'
 import { validateRegisterForm } from '@/schemas/validation'
 import type { RegisterFormData as RegisterFormType } from '@/types'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { register, isLoading, error } = useAuth()
+  const { register, isLoading } = useAuth()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<RegisterFormType>({
     name: '',
     email: '',
@@ -26,7 +29,6 @@ export function RegisterForm({
     confirmPassword: '',
     phoneNumber: '',
   })
-  const [validationErrors, setValidationErrors] = useState<string[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,19 +36,25 @@ export function RegisterForm({
     // Validate form data
     const validation = validateRegisterForm(formData)
     if (!validation.isValid) {
-      setValidationErrors(validation.errors)
+      // Show validation errors as toast
+      validation.errors.forEach((error, index) => {
+        setTimeout(() => {
+          toast.error('Validation Error', {
+            description: error,
+          })
+        }, index * 200) // Stagger toasts slightly so they don't overlap
+      })
       return
     }
 
-    // Clear validation errors if valid
-    setValidationErrors([])
-
     try {
-      const result = await register(formData)
-      console.log('Registration successful:', result)
-      // Redirect hoặc update UI sau khi đăng ký thành công
-      window.location.href = '/login' // hoặc sử dụng react-router navigate
+      await register(formData)
+      // Navigate to login page after successful registration
+      setTimeout(() => {
+        navigate('/login')
+      }, 1500) // Wait for toast to be visible
     } catch (err) {
+      // Error handling is now done in useAuth hook with toast
       console.error('Registration failed:', err)
     }
   }
@@ -57,15 +65,13 @@ export function RegisterForm({
       ...prev,
       [name]: value,
     }))
-
-    // Clear validation errors when user starts typing
-    if (validationErrors.length > 0) {
-      setValidationErrors([])
-    }
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div
+      className={cn('flex flex-col gap-6 max-w-2xl mx-auto', className)}
+      {...props}
+    >
       <Card>
         <CardHeader className='text-center'>
           <CardTitle className='text-xl'>Create your account</CardTitle>
@@ -104,27 +110,9 @@ export function RegisterForm({
                 </span>
               </div>
 
-              {/* Hiển thị validation errors */}
-              {validationErrors.length > 0 && (
-                <div className='text-red-500 text-sm bg-red-50 p-3 rounded'>
-                  <ul className='list-disc list-inside space-y-1'>
-                    {validationErrors.map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Hiển thị API error */}
-              {error && (
-                <div className='text-red-500 text-sm text-center bg-red-50 p-2 rounded'>
-                  {error}
-                </div>
-              )}
-
               <div className='grid gap-6'>
                 {/* Two column layout for form fields */}
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   <div className='grid gap-3'>
                     <Label htmlFor='fullName'>Full Name</Label>
                     <Input
@@ -190,7 +178,7 @@ export function RegisterForm({
                 </div>
 
                 <Button type='submit' className='w-full' disabled={isLoading}>
-                  {isLoading ? 'Registering...' : 'Create Account'}
+                  {isLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </div>
               <div className='text-center text-sm'>

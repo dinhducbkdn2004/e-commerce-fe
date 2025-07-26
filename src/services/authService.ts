@@ -36,6 +36,35 @@ class AuthService {
     return response.data.user
   }
 
+  async googleAuth(
+    idToken: string
+    // firebaseUser: FirebaseUserLite
+  ): Promise<LoginResponse> {
+    const response = (await authApi.googleAuth({
+      idToken,
+      // user: {
+      //   uid: firebaseUser.uid,
+      //   email: firebaseUser.email,
+      //   displayName: firebaseUser.displayName,
+      //   photoURL: firebaseUser.photoURL,
+      //   emailVerified: firebaseUser.emailVerified,
+      // },
+    })) as ApiResponse<LoginResponse>
+
+    if (response.data) {
+      const { user, accessToken, refreshToken } = response.data
+
+      // Store tokens and user data
+      storage.setToken(accessToken)
+      storage.set('refresh_token', refreshToken)
+      storage.setUser(user)
+
+      return response.data
+    }
+
+    throw new Error('Google authentication failed')
+  }
+
   async logout(): Promise<void> {
     try {
       await authApi.logout()

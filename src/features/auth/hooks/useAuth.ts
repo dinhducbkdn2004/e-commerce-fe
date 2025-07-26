@@ -6,31 +6,33 @@ import type {
   User,
 } from '@/types'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const login = async (credentials: LoginForm) => {
     setIsLoading(true)
-    setError(null)
 
     try {
       const result = await authService.login(credentials)
+      toast.success('Login successful!', {
+        description: 'Welcome back to BeeLuxe!',
+      })
       return result
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed'
-      setError(errorMessage)
+      toast.error('Login Failed', {
+        description: errorMessage,
+      })
       throw err
     } finally {
       setIsLoading(false)
     }
   }
 
-  // ...existing code...
   const register = async (formData: RegisterFormData) => {
     setIsLoading(true)
-    setError(null)
 
     try {
       // Transform form data to API format
@@ -42,24 +44,56 @@ export const useAuth = () => {
       }
 
       const result = await authService.register(apiData)
+      toast.success('Registration Successful!', {
+        description: 'Your account has been created. Please login to continue.',
+      })
       return result
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Registration failed'
-      setError(errorMessage)
+      toast.error('Registration Failed', {
+        description: errorMessage,
+      })
       throw err
     } finally {
       setIsLoading(false)
     }
   }
-  // ...existing code...
+
+  const googleLogin = async (
+    idToken: string
+    // firebaseUser: FirebaseUserLite
+  ) => {
+    setIsLoading(true)
+    try {
+      const result = await authService.googleAuth(idToken)
+      toast.success('Google Login Successful!', {
+        // description: `Welcome back ${firebaseUser.displayName || firebaseUser.email}!`,
+        description: `Welcome back!`,
+      })
+      return result
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Google login failed'
+      toast.error('Google Login Failed', {
+        description: errorMessage,
+      })
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const logout = async () => {
     setIsLoading(true)
     try {
       await authService.logout()
+      toast.success('Logged out successfully')
     } catch (err) {
       console.error('Logout error:', err)
+      toast.error('Logout failed', {
+        description: 'Please try again',
+      })
     } finally {
       setIsLoading(false)
     }
@@ -76,11 +110,10 @@ export const useAuth = () => {
   return {
     login,
     register,
+    googleLogin,
     logout,
     isAuthenticated,
     getCurrentUser,
     isLoading,
-    error,
-    setError,
   }
 }

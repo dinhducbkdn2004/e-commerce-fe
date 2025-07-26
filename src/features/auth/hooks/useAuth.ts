@@ -1,10 +1,12 @@
 import { authService } from '@/services'
 import type {
+  FirebaseUserLite,
   LoginForm,
   RegisterApiRequest,
   RegisterFormData,
   User,
 } from '@/types'
+import { getErrorMessage } from '@/utils/errorHandler'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -21,7 +23,7 @@ export const useAuth = () => {
       })
       return result
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Login failed'
+      const errorMessage = getErrorMessage(err)
       toast.error('Login Failed', {
         description: errorMessage,
       })
@@ -49,8 +51,7 @@ export const useAuth = () => {
       })
       return result
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Registration failed'
+      const errorMessage = getErrorMessage(err)
       toast.error('Registration Failed', {
         description: errorMessage,
       })
@@ -61,20 +62,18 @@ export const useAuth = () => {
   }
 
   const googleLogin = async (
-    idToken: string
-    // firebaseUser: FirebaseUserLite
+    idToken: string,
+    firebaseUser: FirebaseUserLite
   ) => {
     setIsLoading(true)
     try {
-      const result = await authService.googleAuth(idToken)
+      const result = await authService.googleAuth(idToken, firebaseUser)
       toast.success('Google Login Successful!', {
-        // description: `Welcome back ${firebaseUser.displayName || firebaseUser.email}!`,
-        description: `Welcome back!`,
+        description: `Welcome back ${firebaseUser.displayName || firebaseUser.email}!`,
       })
       return result
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Google login failed'
+      const errorMessage = getErrorMessage(err)
       toast.error('Google Login Failed', {
         description: errorMessage,
       })
@@ -88,11 +87,14 @@ export const useAuth = () => {
     setIsLoading(true)
     try {
       await authService.logout()
-      toast.success('Logged out successfully')
+      toast.success('Logged out successfully', {
+        description: 'See you again!',
+      })
     } catch (err) {
       console.error('Logout error:', err)
+      const errorMessage = getErrorMessage(err)
       toast.error('Logout failed', {
-        description: 'Please try again',
+        description: errorMessage,
       })
     } finally {
       setIsLoading(false)

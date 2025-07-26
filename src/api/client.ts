@@ -5,12 +5,19 @@ import axios from 'axios'
 class ApiError extends Error {
   public status?: number
   public originalError: unknown
+  public messageVi?: string
 
-  constructor(message: string, status?: number, originalError?: unknown) {
+  constructor(
+    message: string,
+    status?: number,
+    originalError?: unknown,
+    messageVi?: string
+  ) {
     super(message)
     this.name = 'ApiError'
     this.status = status
     this.originalError = originalError
+    this.messageVi = messageVi
   }
 }
 
@@ -45,15 +52,22 @@ class ApiClient {
         // Extract meaningful error message from backend response
         const backendError = error.response?.data
         let errorMessage = 'Request failed'
+        let errorMessageVi = 'Yêu cầu thất bại'
 
         if (backendError) {
-          // Handle different backend error response formats
+          // Handle new API response format with bilingual messages
           if (backendError.message) {
-            errorMessage = backendError.message
+            errorMessage = backendError.message // Prioritize English message
+            errorMessageVi = backendError.messageVi || backendError.message
+          } else if (backendError.messageVi) {
+            errorMessage = backendError.messageVi
+            errorMessageVi = backendError.messageVi
           } else if (backendError.error) {
             errorMessage = backendError.error
+            errorMessageVi = backendError.error
           } else if (typeof backendError === 'string') {
             errorMessage = backendError
+            errorMessageVi = backendError
           }
         }
 
@@ -61,7 +75,8 @@ class ApiClient {
         const meaningfulError = new ApiError(
           errorMessage,
           error.response?.status,
-          error
+          error,
+          errorMessageVi
         )
 
         console.error('API request failed:', {

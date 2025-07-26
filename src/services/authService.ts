@@ -1,6 +1,7 @@
 import { authApi } from '@/api'
 import type {
   ApiResponse,
+  FirebaseUserLite,
   LoginForm,
   LoginResponse,
   RegisterApiRequest,
@@ -37,18 +38,18 @@ class AuthService {
   }
 
   async googleAuth(
-    idToken: string
-    // firebaseUser: FirebaseUserLite
+    idToken: string,
+    firebaseUser: FirebaseUserLite
   ): Promise<LoginResponse> {
     const response = (await authApi.googleAuth({
       idToken,
-      // user: {
-      //   uid: firebaseUser.uid,
-      //   email: firebaseUser.email,
-      //   displayName: firebaseUser.displayName,
-      //   photoURL: firebaseUser.photoURL,
-      //   emailVerified: firebaseUser.emailVerified,
-      // },
+      user: {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        emailVerified: firebaseUser.emailVerified,
+      },
     })) as ApiResponse<LoginResponse>
 
     if (response.data) {

@@ -5,8 +5,15 @@ export const authApi = {
   login: (credentials: { email: string; password: string }) =>
     apiClient.post('/auth/login', credentials),
 
-  register: (userData: { name: string; email: string; password: string; phoneNumber: string }) =>
-    apiClient.post('/auth/register', userData),
+  register: (userData: {
+    name: string
+    email: string
+    password: string
+    phoneNumber: string
+  }) => apiClient.post('/auth/register', userData),
+
+  googleAuth: (data: { idToken: string; user: Record<string, unknown> }) =>
+    apiClient.post('/auth/google', data),
 
   logout: () => apiClient.post('/auth/logout'),
 

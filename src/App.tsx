@@ -5,6 +5,7 @@ import LoginPage from '@pages/LoginPage/LoginPage'
 import NotFound from '@pages/NotFound/NotFound'
 import RegisterPage from '@pages/RegisterPage/RegisterPage'
 import { Route, Routes } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
@@ -18,6 +19,13 @@ function App() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </MainLayout>
+      <Toaster
+        position='top-right'
+        richColors
+        expand={false}
+        visibleToasts={4}
+        closeButton
+      />
     </ThemeProvider>
   )
 }

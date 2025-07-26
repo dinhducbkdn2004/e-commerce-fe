@@ -22,6 +22,14 @@ export const validateLoginForm = (data: {
     errors.push('Password is required')
   }
 
+  if (!data.password) {
+    errors.push('Password is required')
+  } else if (!isValidPassword(data.password)) {
+    errors.push(
+      `Password must be at least ${VALIDATION.PASSWORD_MIN_LENGTH} characters`
+    )
+  }
+
   return {
     isValid: errors.length === 0,
     errors,

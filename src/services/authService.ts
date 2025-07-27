@@ -16,11 +16,10 @@ class AuthService {
     )) as ApiResponse<LoginResponse>
 
     if (response.data) {
-      const { user, accessToken, refreshToken } = response.data
+      const { user, accessToken } = response.data // 🔥 Không lấy refreshToken nữa
 
-      // Store tokens and user data
+      // 🔥 Chỉ lưu access token và user data
       storage.setToken(accessToken)
-      storage.set('refresh_token', refreshToken)
       storage.setUser(user)
 
       return response.data
@@ -53,11 +52,10 @@ class AuthService {
     })) as ApiResponse<LoginResponse>
 
     if (response.data) {
-      const { user, accessToken, refreshToken } = response.data
+      const { user, accessToken } = response.data // 🔥 Không lấy refreshToken
 
-      // Store tokens and user data
+      // 🔥 Chỉ lưu access token và user data
       storage.setToken(accessToken)
-      storage.set('refresh_token', refreshToken)
       storage.setUser(user)
 
       return response.data
@@ -68,19 +66,20 @@ class AuthService {
 
   async logout(): Promise<void> {
     try {
-      await authApi.logout()
+      await authApi.logout() // 🔥 API call sẽ tự động clear httpOnly cookie
     } catch (error) {
       console.error('Logout API call failed:', error)
     } finally {
-      // Always clear local storage
+      // 🔥 Chỉ clear access token và user data
       storage.removeToken()
-      storage.remove('refresh_token')
       storage.removeUser()
+      // Không cần remove refresh_token nữa vì nó ở cookie
     }
   }
 
   async refreshToken(): Promise<string | null> {
     try {
+      // 🔥 Gọi refresh mà không cần gửi token (cookie tự động được gửi)
       const response = (await authApi.refreshToken()) as ApiResponse<{
         accessToken: string
       }>

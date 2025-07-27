@@ -84,22 +84,22 @@ export default function CategorySection() {
           </p>
         </div>
 
-        {/* Categories Grid */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8 mb-12'>
-          {categories.map(category => (
+        {/* Balanced Categories Grid */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12'>
+          {categories.map((category, index) => (
             <Link
               key={category.id}
               to={category.href}
               className={`group relative overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${
-                category.featured
-                  ? 'md:col-span-2 lg:col-span-4'
-                  : 'lg:col-span-2'
-              }`}
+                category.featured ? 'sm:col-span-2 lg:col-span-2' : ''
+              } ${index === 0 ? 'sm:row-span-2' : ''}`}
             >
-              {/* Image Container */}
+              {/* Consistent height container */}
               <div
                 className={`relative overflow-hidden ${
-                  category.featured ? 'aspect-[16/9]' : 'aspect-[4/3]'
+                  category.featured
+                    ? 'h-80 sm:h-96 lg:h-[500px]'
+                    : 'h-80 sm:h-72 lg:h-60'
                 }`}
               >
                 <img
@@ -113,21 +113,31 @@ export default function CategorySection() {
 
                 {/* Badge */}
                 {category.badge && (
-                  <div className='absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg'>
+                  <div className='absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg'>
                     {category.badge}
                   </div>
                 )}
 
                 {/* Content */}
-                <div className='absolute bottom-0 left-0 right-0 p-6 transform transition-transform duration-500'>
-                  <h3 className='text-xl sm:text-2xl font-bold text-white mb-2 group-hover:text-purple-200 transition-colors duration-300'>
+                <div className='absolute bottom-0 left-0 right-0 p-4 sm:p-6'>
+                  <h3
+                    className={`font-bold text-white mb-2 group-hover:text-purple-200 transition-colors duration-300 line-clamp-2 ${
+                      category.featured
+                        ? 'text-xl sm:text-2xl lg:text-3xl'
+                        : 'text-lg sm:text-xl'
+                    }`}
+                  >
                     {category.name}
                   </h3>
-                  <p className='text-gray-200 text-sm mb-4 opacity-90'>
+                  <p
+                    className={`text-gray-200 mb-4 opacity-90 line-clamp-2 ${
+                      category.featured ? 'text-base sm:text-lg' : 'text-sm'
+                    }`}
+                  >
                     {category.description}
                   </p>
-                  <div className='flex items-center text-white font-medium text-sm opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out'>
-                    <span className='text-purple-200'>Shop Now</span>
+                  <div className='flex items-center text-white font-medium opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out'>
+                    <span className='text-purple-200 text-sm'>Shop Now</span>
                     <ArrowRight className='w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300' />
                   </div>
                 </div>

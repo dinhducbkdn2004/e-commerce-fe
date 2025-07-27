@@ -76,7 +76,7 @@ export default function SaleSection() {
                   <Button
                     variant='outline'
                     size='lg'
-                    className='w-full sm:w-auto border-2 border-white/30 hover:border-white/50 text-white px-8 py-4 rounded-full transition-all duration-300 backdrop-blur-sm hover:bg-white/10'
+                    className='border-2 border-gray-300 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500 px-8 py-4 rounded-full transition-all duration-300 w-full sm:w-auto'
                   >
                     View New Arrivals
                   </Button>

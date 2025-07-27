@@ -13,8 +13,8 @@ export default function HeroSection() {
       </div>
 
       <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-28'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[600px]'>
+        <div className='pt-8 pb-16 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-28'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[500px] sm:min-h-[600px]'>
             {/* Left Content */}
             <div className='text-center lg:text-left flex flex-col justify-center'>
               {/* Badge */}

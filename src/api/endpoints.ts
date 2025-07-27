@@ -17,7 +17,7 @@ export const authApi = {
 
   logout: () => apiClient.post('/auth/logout'),
 
-  refreshToken: () => apiClient.post('/auth/refresh'),
+  refreshToken: () => apiClient.post('/api/v1/auth/refresh-token'), // Không gửi refresh token trong body
 
   verifyEmail: (token: string) =>
     apiClient.post('/auth/verify-email', { token }),

@@ -1,4 +1,5 @@
 import { env } from '@/config'
+import type { ApiResponse, AuthTokens } from '@/types'
 import axios from 'axios'
 
 // Custom error class for API errors
@@ -28,6 +29,7 @@ class ApiClient {
   constructor() {
     this.client = axios.create({
       baseURL: env.BASE_URL_API,
+      withCredentials: true, // 🔥 Quan trọng: gửi cookies tự động
       headers: {
         'Content-Type': 'application/json',
       },
@@ -45,19 +47,49 @@ class ApiClient {
       error => Promise.reject(error)
     )
 
-    // Setup response interceptor for error handling
+    // 🔥 Cập nhật response interceptor để handle automatic token refresh
     this.client.interceptors.response.use(
       response => response,
-      error => {
-        // Extract meaningful error message from backend response
+      async error => {
+        const originalRequest = error.config
+
+        // Nếu 401 và chưa retry
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true
+
+          try {
+            // Gọi refresh token (không cần gửi token vì đã có trong cookie)
+            const { data: response } = await this.client.post<
+              ApiResponse<AuthTokens>
+            >('/api/v1/auth/refresh-token')
+
+            if (response?.data?.accessToken) {
+              const newToken = response.data.accessToken
+
+              // Cập nhật token trong localStorage
+              localStorage.setItem('access_token', newToken)
+
+              // Retry request gốc với token mới
+              originalRequest.headers.Authorization = `Bearer ${newToken}`
+              return this.client(originalRequest)
+            }
+          } catch (refreshError) {
+            // Refresh thất bại → redirect đến login
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('user')
+            window.location.href = '/login'
+            return Promise.reject(refreshError)
+          }
+        }
+
+        // Extract meaningful error message từ backend response
         const backendError = error.response?.data
         let errorMessage = 'Request failed'
         let errorMessageVi = 'Yêu cầu thất bại'
 
         if (backendError) {
-          // Handle new API response format with bilingual messages
           if (backendError.message) {
-            errorMessage = backendError.message // Prioritize English message
+            errorMessage = backendError.message
             errorMessageVi = backendError.messageVi || backendError.message
           } else if (backendError.messageVi) {
             errorMessage = backendError.messageVi
@@ -71,7 +103,6 @@ class ApiClient {
           }
         }
 
-        // Create a new error with the meaningful message
         const meaningfulError = new ApiError(
           errorMessage,
           error.response?.status,

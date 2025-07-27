@@ -1,278 +1,263 @@
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  ArrowRight,
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  Youtube,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
+  const footerSections = [
+    {
+      title: 'Shop',
+      links: [
+        { name: 'New Arrivals', href: '/new-arrivals' },
+        { name: 'Bags & Purses', href: '/shop/bags' },
+        { name: 'Clothing', href: '/shop/clothing' },
+        { name: 'Accessories', href: '/shop/accessories' },
+        { name: 'Jewelry', href: '/shop/jewelry' },
+        { name: 'Sale Items', href: '/sale' },
+      ],
+    },
+    {
+      title: 'Customer Service',
+      links: [
+        { name: 'Contact Us', href: '/contact' },
+        { name: 'Shipping Info', href: '/shipping' },
+        { name: 'Returns & Exchanges', href: '/returns' },
+        { name: 'Size Guide', href: '/size-guide' },
+        { name: 'Track Your Order', href: '/track-order' },
+        { name: 'FAQ', href: '/faq' },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
+        { name: 'About Us', href: '/about' },
+        { name: 'Careers', href: '/careers' },
+        { name: 'Press', href: '/press' },
+        { name: 'Sustainability', href: '/sustainability' },
+        { name: 'Our Story', href: '/story' },
+        { name: 'Blog', href: '/blog' },
+      ],
+    },
+  ]
+
+  const contactInfo = [
+    { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
+    { icon: Mail, text: 'hello@beeluxe.com', href: 'mailto:hello@beeluxe.com' },
+    { icon: MapPin, text: '123 Fashion Ave, NYC 10001', href: '#' },
+  ]
+
+  const socialLinks = [
+    { icon: Facebook, href: 'https://facebook.com/beeluxe', label: 'Facebook' },
+    {
+      icon: Instagram,
+      href: 'https://instagram.com/beeluxe',
+      label: 'Instagram',
+    },
+    { icon: Twitter, href: 'https://twitter.com/beeluxe', label: 'Twitter' },
+    { icon: Youtube, href: 'https://youtube.com/beeluxe', label: 'YouTube' },
+  ]
+
   return (
-    <footer
-      aria-labelledby='footer-heading'
-      className='border-t border-gray-900/10 dark:border-gray-700'
-    >
-      <h2 id='footer-heading' className='sr-only'>
-        Footer
-      </h2>
-      <div className='mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-20 lg:px-8 lg:pt-24'>
-        <div className='grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12'>
-          <div>
-            <div className='flex items-center font-bold transition-colors'>
-              <Link to='/' className='flex items-center space-x-2 group'>
-                {/* Diamond Icon as Logo Alternative */}
-                <div className='relative'>
-                  <div className='w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-600 transform rotate-45 rounded-sm group-hover:scale-110 transition-transform duration-300'></div>
-                  <div className='absolute inset-1 bg-white dark:bg-gray-900 transform rotate-45 rounded-sm'></div>
-                </div>
-              </Link>
-            </div>
-            <p className='mt-4 text-sm leading-6 text-gray-600 dark:text-gray-400'>
-              Making the world a better place through constructing elegant
-              hierarchies.
+    <footer className='bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 border-t border-purple-200 dark:border-purple-800'>
+      <div className='container mx-auto px-4 py-12 lg:py-16'>
+        {/* Main Footer Content */}
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12'>
+          {/* Brand Section */}
+          <div className='lg:col-span-2'>
+            {/* Logo */}
+            <Link to='/' className='flex items-center space-x-2 group mb-6'>
+              <div className='relative'>
+                <div className='w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 transform rotate-45 rounded-sm group-hover:scale-110 transition-transform duration-300'></div>
+                <div className='absolute inset-1 bg-white dark:bg-gray-900 transform rotate-45 rounded-sm'></div>
+              </div>
+              <span className='text-2xl font-light tracking-wider text-gray-900 dark:text-white'>
+                Bee
+                <span className='font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600'>
+                  Luxe
+                </span>
+              </span>
+            </Link>
+
+            <p className='text-gray-600 dark:text-gray-400 mb-6 max-w-md leading-relaxed'>
+              Discover luxury fashion and accessories crafted with passion. Your
+              style journey begins here with premium quality and timeless
+              elegance.
             </p>
-            <div className='mt-6 flex space-x-6'>
-              <Link to='#' className='text-gray-400 hover:text-gray-500'>
-                <span className='sr-only'>Facebook</span>
-                <svg
-                  className='h-6 w-6'
-                  fill='currentColor'
-                  viewBox='0 0 24 24'
+
+            {/* Contact Information */}
+            <div className='space-y-3 mb-6'>
+              {contactInfo.map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.href}
+                  className='flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group'
                 >
-                  <path
-                    fillRule='evenodd'
-                    d='M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z'
-                    clipRule='evenodd'
-                  />
-                </svg>
-              </Link>
-              <Link to='#' className='text-gray-400 hover:text-gray-500'>
-                <span className='sr-only'>Instagram</span>
-                <svg
-                  className='h-6 w-6'
-                  fill='currentColor'
-                  viewBox='0 0 24 24'
+                  <item.icon className='h-4 w-4 group-hover:scale-110 transition-transform' />
+                  <span className='text-sm'>{item.text}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Social Links */}
+            <div className='flex space-x-4'>
+              {socialLinks.map((social, index) => (
+                <Link
+                  key={index}
+                  to={social.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md hover:scale-110 transition-all duration-200 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 border border-purple-100 dark:border-purple-800'
+                  aria-label={social.label}
                 >
-                  <path
-                    fillRule='evenodd'
-                    d='M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987c6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447c0-1.297.49-2.448 1.418-3.323C6.001 8.2 7.152 7.71 8.449 7.71c1.297 0 2.448.49 3.323 1.414c.875.875 1.414 2.026 1.414 3.323c0 1.297-.539 2.448-1.414 3.323C10.897 16.645 9.746 17.135 8.449 17.135z'
-                    clipRule='evenodd'
-                  />
-                </svg>
-              </Link>
-              <Link to='#' className='text-gray-400 hover:text-gray-500'>
-                <span className='sr-only'>Twitter</span>
-                <svg
-                  className='h-6 w-6'
-                  fill='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path d='M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84' />
-                </svg>
-              </Link>
+                  <social.icon className='h-5 w-5' />
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Products */}
-          <div>
-            <h3 className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100'>
-              Products
-            </h3>
-            <ul role='list' className='mt-6 space-y-4'>
-              <li className='text-sm'>
-                <Link
-                  to='/bags'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Bags
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/tees'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Tees
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/objects'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Objects
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/home-goods'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Home Goods
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/accessories'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Accessories
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Customer Service */}
-          <div>
-            <h3 className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100'>
-              Customer Service
-            </h3>
-            <ul role='list' className='mt-6 space-y-4'>
-              <li className='text-sm'>
-                <Link
-                  to='/contact'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Contact
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/shipping'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Shipping
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/returns'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Returns
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/warranty'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Warranty
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/faq'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100'>
-              Company
-            </h3>
-            <ul role='list' className='mt-6 space-y-4'>
-              <li className='text-sm'>
-                <Link
-                  to='/about'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  About
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/careers'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Careers
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/press'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Press
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/sustainability'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Sustainability
-                </Link>
-              </li>
-              <li className='text-sm'>
-                <Link
-                  to='/privacy'
-                  className='leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
-                >
-                  Privacy
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Footer Links */}
+          {footerSections.map((section, index) => (
+            <div key={index}>
+              <h3 className='text-gray-900 dark:text-white font-semibold mb-4 text-sm uppercase tracking-wider'>
+                {section.title}
+              </h3>
+              <ul className='space-y-3'>
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <Link
+                      to={link.href}
+                      className='text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group'
+                    >
+                      <span>{link.name}</span>
+                      <ArrowRight className='h-3 w-3 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200' />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Newsletter Section */}
-        <div className='mt-16 border-t border-gray-900/10 pt-12 dark:border-gray-700'>
+        <div className='mt-12 pt-8 border-t border-purple-200 dark:border-purple-800'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
             <div>
-              <h3 className='text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100'>
-                Stay updated
+              <h3 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
+                Stay in the Loop
               </h3>
-              <p className='mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400'>
-                Get the latest news, articles, and resources delivered to your
-                inbox weekly.
+              <p className='text-gray-600 dark:text-gray-400 text-sm leading-relaxed'>
+                Be the first to know about new collections, exclusive offers,
+                and style tips. Join our newsletter for 10% off your first
+                order.
               </p>
             </div>
             <div>
-              <form className='flex gap-4'>
-                <input
-                  id='email-address'
+              <form className='flex flex-col sm:flex-row gap-3'>
+                <Input
                   type='email'
+                  placeholder='Enter your email address'
+                  className='flex-1 bg-white dark:bg-gray-800 border-purple-300 dark:border-purple-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400'
                   required
-                  autoComplete='email'
-                  placeholder='Enter your email'
-                  className='flex-1 min-w-0 appearance-none rounded-lg border-0 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600 dark:placeholder:text-gray-500'
                 />
-                <button
+                <Button
                   type='submit'
-                  className='flex-shrink-0 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors'
+                  className='bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 whitespace-nowrap border-0'
                 >
                   Subscribe
-                </button>
+                  <ArrowRight className='h-4 w-4 ml-2' />
+                </Button>
               </form>
+              <p className='text-xs text-gray-500 dark:text-gray-500 mt-2'>
+                By subscribing, you agree to our{' '}
+                <Link
+                  to='/privacy'
+                  className='underline hover:text-purple-600 dark:hover:text-purple-400 transition-colors'
+                >
+                  Privacy Policy
+                </Link>{' '}
+                and{' '}
+                <Link
+                  to='/terms'
+                  className='underline hover:text-purple-600 dark:hover:text-purple-400 transition-colors'
+                >
+                  Terms of Service
+                </Link>
+                .
+              </p>
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className='mt-12 border-t border-gray-900/10 pt-8 dark:border-gray-700'>
-          <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
-            <p className='text-sm leading-5 text-gray-500 dark:text-gray-400'>
-              © 2025 BeeLuxe. All rights reserved.
-            </p>
-            <div className='flex items-center gap-6'>
+        <div className='mt-12 pt-8 border-t border-purple-200 dark:border-purple-800'>
+          <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
+            <div className='flex flex-col sm:flex-row items-center gap-4 text-sm text-gray-500 dark:text-gray-400'>
+              <p>© {currentYear} BeeLuxe. All rights reserved.</p>
+              <div className='flex items-center gap-4'>
+                <span className='hidden sm:block'>•</span>
+                <span>Made with ❤️ in New York</span>
+              </div>
+            </div>
+
+            <div className='flex flex-wrap items-center gap-6 text-sm'>
               <Link
                 to='/terms'
-                className='text-sm leading-5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
+                className='text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors'
               >
-                Terms
+                Terms of Service
               </Link>
               <Link
                 to='/privacy'
-                className='text-sm leading-5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
+                className='text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors'
               >
-                Privacy
+                Privacy Policy
               </Link>
               <Link
                 to='/cookies'
-                className='text-sm leading-5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors'
+                className='text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors'
               >
-                Cookies
+                Cookie Policy
               </Link>
+              <Link
+                to='/accessibility'
+                className='text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors'
+              >
+                Accessibility
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Payment Methods & Security */}
+        <div className='mt-8 pt-6 border-t border-purple-200 dark:border-purple-800'>
+          <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
+            <div className='flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400'>
+              <span>Secure payments powered by</span>
+              <div className='flex items-center gap-2 ml-2'>
+                <div className='px-2 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded text-xs font-medium'>
+                  Stripe
+                </div>
+                <div className='px-2 py-1 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded text-xs font-medium'>
+                  PayPal
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400'>
+              <span>🔒 SSL Secured</span>
+              <span>•</span>
+              <span>📦 Free shipping over $100</span>
             </div>
           </div>
         </div>

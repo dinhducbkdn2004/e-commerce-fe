@@ -19,10 +19,6 @@ export const useGoogleAuth = () => {
       const user = result.user
       const accessToken = await user.getIdToken()
 
-      toast.success('Google Sign-in Successful!', {
-        description: `Welcome ${user.displayName || user.email}!`,
-      })
-
       return {
         user,
         accessToken,

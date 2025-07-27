@@ -10,10 +10,10 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen flex flex-col bg-white dark:bg-gray-900'>
       <ProgressBar />
       <Header />
-      <main className='flex-1 pt-[4.5rem]'>{children}</main>
+      <main className='flex-1 pt-16 lg:pt-[4.5rem]'>{children}</main>
       <Footer />
       <ScrollToTop />
     </div>

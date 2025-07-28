@@ -9,9 +9,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGoogleAuth } from '@/features/auth/hooks/useGoogleAuth'
 import { cn } from '@/lib/utils'
 import { validateRegisterForm } from '@/schemas/validation'
-import type { RegisterFormData as RegisterFormType } from '@/types'
+import type {
+  FirebaseUserLite,
+  RegisterFormData as RegisterFormType,
+} from '@/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -20,7 +24,8 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { register, isLoading } = useAuth()
+  const { register, googleLogin, isLoading } = useAuth()
+  const { signInWithGoogle, isLoading: isGoogleLoading } = useGoogleAuth()
   const navigate = useNavigate()
   const [formData, setFormData] = useState<RegisterFormType>({
     name: '',
@@ -67,12 +72,28 @@ export function RegisterForm({
     }))
   }
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithGoogle()
+      if (result) {
+        await googleLogin(result.accessToken!, result.user as FirebaseUserLite)
+        setTimeout(() => {
+          navigate('/')
+        }, 1500)
+      }
+    } catch (error) {
+      console.log('Google sign-in failed:', error)
+    }
+  }
+
+  const isButtonLoading = isLoading || isGoogleLoading
+
   return (
     <div
       className={cn('flex flex-col gap-6 max-w-2xl mx-auto', className)}
       {...props}
     >
-      <Card>
+      <Card className='bg-white/70 dark:bg-gray-900/80 backdrop-blur-xl border border-white/60 dark:border-gray-600/60 shadow-2xl shadow-purple-500/20 ring-1 ring-white/20 dark:ring-gray-600/30'>
         <CardHeader className='text-center'>
           <CardTitle className='text-xl'>Create your account</CardTitle>
           <CardDescription>
@@ -83,7 +104,11 @@ export function RegisterForm({
           <form onSubmit={handleSubmit}>
             <div className='grid gap-6'>
               <div className='flex flex-col gap-4'>
-                <Button variant='outline' className='w-full' type='button'>
+                <Button
+                  variant='outline'
+                  className='w-full bg-white/30 dark:bg-gray-800/40 border-gray-300/60 dark:border-gray-600/60 backdrop-blur-sm hover:bg-white/50 dark:hover:bg-gray-800/60'
+                  type='button'
+                >
                   {/* Apple SVG */}
                   <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
                     <path
@@ -93,7 +118,13 @@ export function RegisterForm({
                   </svg>
                   Sign up with Apple
                 </Button>
-                <Button variant='outline' className='w-full' type='button'>
+                <Button
+                  variant='outline'
+                  className='w-full bg-white/30 dark:bg-gray-800/40 border-gray-300/60 dark:border-gray-600/60 backdrop-blur-sm hover:bg-white/50 dark:hover:bg-gray-800/60'
+                  type='button'
+                  onClick={handleGoogleSignIn}
+                  disabled={isButtonLoading}
+                >
                   {/* Google SVG */}
                   <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
                     <path
@@ -101,13 +132,16 @@ export function RegisterForm({
                       fill='currentColor'
                     />
                   </svg>
-                  Sign up with Google
+
+                  {isGoogleLoading ? 'Signing in...' : 'Sign up with Google'}
                 </Button>
               </div>
-              <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
-                <span className='bg-card text-muted-foreground relative z-10 px-2'>
+              <div className='flex items-center'>
+                <div className='flex-1 h-px bg-gray-300/60 dark:bg-gray-600/60'></div>
+                <span className='bg-white/40 dark:bg-gray-800/50 text-muted-foreground px-3 py-1 rounded-full backdrop-blur-sm border border-gray-300/40 dark:border-gray-600/40 text-sm'>
                   Or continue with
                 </span>
+                <div className='flex-1 h-px bg-gray-300/60 dark:bg-gray-600/60'></div>
               </div>
 
               <div className='grid gap-6'>
@@ -122,6 +156,7 @@ export function RegisterForm({
                       placeholder='John Doe'
                       value={formData.name}
                       onChange={handleInputChange}
+                      className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                       required
                     />
                   </div>
@@ -134,6 +169,7 @@ export function RegisterForm({
                       placeholder='m@example.com'
                       value={formData.email}
                       onChange={handleInputChange}
+                      className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                       required
                     />
                   </div>
@@ -146,6 +182,7 @@ export function RegisterForm({
                       placeholder='Min. 8 characters'
                       value={formData.password}
                       onChange={handleInputChange}
+                      className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                       required
                     />
                   </div>
@@ -158,6 +195,7 @@ export function RegisterForm({
                       placeholder='Re-enter your password'
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
+                      className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                       required
                     />
                   </div>
@@ -173,17 +211,25 @@ export function RegisterForm({
                     placeholder='123-456-7890'
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
+                    className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                     required
                   />
                 </div>
 
-                <Button type='submit' className='w-full' disabled={isLoading}>
+                <Button
+                  type='submit'
+                  className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0'
+                  disabled={isLoading}
+                >
                   {isLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </div>
               <div className='text-center text-sm'>
                 Already have an account?{' '}
-                <a href='/login' className='underline underline-offset-4'>
+                <a
+                  href='/login'
+                  className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+                >
                   Sign in
                 </a>
               </div>
@@ -191,9 +237,22 @@ export function RegisterForm({
           </form>
         </CardContent>
       </Card>
-      <div className='text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4'>
+      <div className='text-muted-foreground text-center text-xs text-balance'>
         By creating an account, you agree to our{' '}
-        <a href='#'>Terms of Service</a> and <a href='#'>Privacy Policy</a>.
+        <a
+          href='#'
+          className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+        >
+          Terms of Service
+        </a>{' '}
+        and{' '}
+        <a
+          href='#'
+          className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+        >
+          Privacy Policy
+        </a>
+        .
       </div>
     </div>
   )

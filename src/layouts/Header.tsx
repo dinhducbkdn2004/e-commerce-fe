@@ -2,10 +2,13 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useAuthContext } from '@/hooks/useAuthContext'
 import { useScroll } from '@/hooks/useScroll'
 import {
   ChevronDown,
   Heart,
+  LogOut,
   Menu,
   Search,
   ShoppingBag,
@@ -20,6 +23,8 @@ function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const { scrollDirection, isScrolled } = useScroll({ threshold: 50 })
+  const { isAuthenticated, user } = useAuthContext()
+  const { logout } = useAuth()
 
   // Close mobile menu when screen size changes
   useEffect(() => {
@@ -198,24 +203,39 @@ function Header() {
 
               {/* Auth Buttons - Desktop */}
               <div className='hidden lg:flex items-center space-x-2'>
-                <Link to={ROUTES.LOGIN}>
+                {isAuthenticated ? (
                   <Button
                     variant='ghost'
                     size='sm'
+                    onClick={logout}
                     className='hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400'
                   >
                     <User className='h-4 w-4 mr-2' />
-                    Sign in
+                    {user?.name}
+                    <LogOut className='ml-2 h-4 w-4' />
                   </Button>
-                </Link>
-                <Link to={ROUTES.REGISTER}>
-                  <Button
-                    size='sm'
-                    className='bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0'
-                  >
-                    Join
-                  </Button>
-                </Link>
+                ) : (
+                  <>
+                    <Link to={ROUTES.LOGIN}>
+                      <Button
+                        variant='ghost'
+                        size='sm'
+                        className='hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400'
+                      >
+                        <User className='h-4 w-4 mr-2' />
+                        Sign in
+                      </Button>
+                    </Link>
+                    <Link to={ROUTES.REGISTER}>
+                      <Button
+                        size='sm'
+                        className='bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0'
+                      >
+                        Join
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Theme Toggle */}
@@ -357,28 +377,41 @@ function Header() {
 
                 {/* Auth buttons for mobile and tablet */}
                 <div className='space-y-2'>
-                  <Link
-                    to={ROUTES.LOGIN}
-                    className='block'
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
+                  {isAuthenticated ? (
                     <Button
                       variant='outline'
                       className='w-full justify-start border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 py-2.5 sm:py-3'
+                      onClick={logout}
                     >
                       <User className='h-4 w-4 mr-2' />
-                      Sign in
+                      Sign out
                     </Button>
-                  </Link>
-                  <Link
-                    to={ROUTES.REGISTER}
-                    className='block'
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Button className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-0 py-2.5 sm:py-3'>
-                      Create Account
-                    </Button>
-                  </Link>
+                  ) : (
+                    <>
+                      <Link
+                        to={ROUTES.LOGIN}
+                        className='block'
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Button
+                          variant='outline'
+                          className='w-full justify-start border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 py-2.5 sm:py-3'
+                        >
+                          <User className='h-4 w-4 mr-2' />
+                          Sign in
+                        </Button>
+                      </Link>
+                      <Link
+                        to={ROUTES.REGISTER}
+                        className='block'
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Button className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-0 py-2.5 sm:py-3'>
+                          Create Account
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

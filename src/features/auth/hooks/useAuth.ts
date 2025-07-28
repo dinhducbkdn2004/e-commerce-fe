@@ -1,3 +1,4 @@
+import { useAuthContext } from '@/hooks/useAuthContext'
 import { authService } from '@/services'
 import type {
   FirebaseUserLite,
@@ -12,12 +13,17 @@ import { toast } from 'sonner'
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const authContext = useAuthContext()
 
   const login = async (credentials: LoginForm) => {
     setIsLoading(true)
 
     try {
       const result = await authService.login(credentials)
+
+      // Update global auth context
+      authContext.login(result.user)
+
       toast.success('Login successful!', {
         description: 'Welcome back to BeeLuxe!',
       })
@@ -68,6 +74,10 @@ export const useAuth = () => {
     setIsLoading(true)
     try {
       const result = await authService.googleAuth(idToken, firebaseUser)
+
+      // Update global auth context
+      authContext.login(result.user)
+
       toast.success('Google Login Successful!', {
         description: `Welcome back ${firebaseUser.displayName || firebaseUser.email}!`,
       })
@@ -86,7 +96,7 @@ export const useAuth = () => {
   const logout = async () => {
     setIsLoading(true)
     try {
-      await authService.logout()
+      await authContext.logout()
       toast.success('Logged out successfully', {
         description: 'See you again!',
       })
@@ -102,11 +112,11 @@ export const useAuth = () => {
   }
 
   const isAuthenticated = (): boolean => {
-    return authService.isAuthenticated()
+    return authContext.isAuthenticated
   }
 
   const getCurrentUser = (): User | null => {
-    return authService.getCurrentUser()
+    return authContext.user
   }
 
   return {

@@ -53,15 +53,25 @@ class ApiClient {
       async error => {
         const originalRequest = error.config
 
-        // Nếu 401 và chưa retry
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        // Danh sách endpoints không cần refresh token khi 401
+        const authEndpoints = ['/auth/login', '/auth/register', '/auth/google']
+        const isAuthEndpoint = authEndpoints.some(endpoint =>
+          originalRequest.url?.includes(endpoint)
+        )
+
+        // Nếu 401 và chưa retry và KHÔNG phải auth endpoints
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry &&
+          !isAuthEndpoint
+        ) {
           originalRequest._retry = true
 
           try {
             // Gọi refresh token (không cần gửi token vì đã có trong cookie)
             const { data: response } = await this.client.post<
               ApiResponse<AuthTokens>
-            >('/api/v1/auth/refresh-token')
+            >('/auth/refresh-token')
 
             if (response?.data?.accessToken) {
               const newToken = response.data.accessToken

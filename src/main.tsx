@@ -1,7 +1,10 @@
 import { validateEnv } from '@/config/env'
+import { AuthProvider } from '@/contexts/AuthProvider'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import App from './App.tsx'
 import './index.css'
 
@@ -15,7 +18,12 @@ try {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+          <Toaster position='bottom-right' richColors />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 )

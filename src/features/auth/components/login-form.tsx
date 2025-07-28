@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { validateLoginForm } from '@/schemas/validation'
 import type { FirebaseUserLite, LoginForm as LoginFormType } from '@/types'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export function LoginForm({
@@ -24,6 +24,7 @@ export function LoginForm({
   const { login, googleLogin, isLoading } = useAuth()
   const { signInWithGoogle, isLoading: isGoogleLoading } = useGoogleAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [formData, setFormData] = useState<LoginFormType>({
     email: '',
     password: '',
@@ -47,8 +48,10 @@ export function LoginForm({
 
     try {
       await login(formData)
+      // Redirect to intended page or home
+      const from = location.state?.from?.pathname || '/'
       setTimeout(() => {
-        navigate('/')
+        navigate(from, { replace: true })
       }, 1500)
     } catch (err) {
       console.error('Login failed:', err)
@@ -60,8 +63,10 @@ export function LoginForm({
       const result = await signInWithGoogle()
       if (result) {
         await googleLogin(result.accessToken!, result.user as FirebaseUserLite)
+        // Redirect to intended page or home
+        const from = location.state?.from?.pathname || '/'
         setTimeout(() => {
-          navigate('/')
+          navigate(from, { replace: true })
         }, 1500)
       }
     } catch (err) {
@@ -84,7 +89,7 @@ export function LoginForm({
       className={cn('flex flex-col gap-6 max-w-md mx-auto', className)}
       {...props}
     >
-      <Card>
+      <Card className='bg-white/70 dark:bg-gray-900/80 backdrop-blur-xl border border-white/60 dark:border-gray-600/60 shadow-2xl shadow-purple-500/20 ring-1 ring-white/20 dark:ring-gray-600/30'>
         <CardHeader className='text-center'>
           <CardTitle className='text-xl'>Welcome back</CardTitle>
           <CardDescription>
@@ -95,7 +100,11 @@ export function LoginForm({
           <form onSubmit={handleSubmit}>
             <div className='grid gap-6'>
               <div className='flex flex-col gap-4'>
-                <Button variant='outline' className='w-full' type='button'>
+                <Button
+                  variant='outline'
+                  className='w-full bg-white/30 dark:bg-gray-800/40 border-gray-300/60 dark:border-gray-600/60 backdrop-blur-sm hover:bg-white/50 dark:hover:bg-gray-800/60'
+                  type='button'
+                >
                   <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
                     <path
                       d='M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701'
@@ -106,7 +115,7 @@ export function LoginForm({
                 </Button>
                 <Button
                   variant='outline'
-                  className='w-full'
+                  className='w-full bg-white/30 dark:bg-gray-800/40 border-gray-300/60 dark:border-gray-600/60 backdrop-blur-sm hover:bg-white/50 dark:hover:bg-gray-800/60'
                   type='button'
                   onClick={handleGoogleSignIn}
                   disabled={isButtonLoading}
@@ -120,10 +129,12 @@ export function LoginForm({
                   {isGoogleLoading ? 'Signing in...' : 'Login with Google'}
                 </Button>
               </div>
-              <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
-                <span className='bg-card text-muted-foreground relative z-10 px-2'>
+              <div className='flex items-center'>
+                <div className='flex-1 h-px bg-gray-300/60 dark:bg-gray-600/60'></div>
+                <span className='bg-white/40 dark:bg-gray-800/50 text-muted-foreground px-3 py-1 rounded-full backdrop-blur-sm border border-gray-300/40 dark:border-gray-600/40 text-sm'>
                   Or continue with
                 </span>
+                <div className='flex-1 h-px bg-gray-300/60 dark:bg-gray-600/60'></div>
               </div>
 
               <div className='grid gap-6'>
@@ -136,6 +147,7 @@ export function LoginForm({
                     placeholder='m@example.com'
                     value={formData.email}
                     onChange={handleInputChange}
+                    className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                     required
                   />
                 </div>
@@ -144,7 +156,7 @@ export function LoginForm({
                     <Label htmlFor='password'>Password</Label>
                     <a
                       href='#'
-                      className='ml-auto text-sm underline-offset-4 hover:underline'
+                      className='ml-auto text-sm underline-offset-4 hover:underline text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
                     >
                       Forgot your password?
                     </a>
@@ -156,12 +168,13 @@ export function LoginForm({
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder='Enter your password'
+                    className='bg-white/50 dark:bg-gray-800/60 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm focus:bg-white/70 dark:focus:bg-gray-800/80 focus:border-purple-400 dark:focus:border-purple-500'
                     required
                   />
                 </div>
                 <Button
                   type='submit'
-                  className='w-full'
+                  className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0'
                   disabled={isButtonLoading}
                 >
                   {isLoading ? 'Logging in...' : 'Login'}
@@ -169,7 +182,10 @@ export function LoginForm({
               </div>
               <div className='text-center text-sm'>
                 Don&apos;t have an account?{' '}
-                <a href='/register' className='underline underline-offset-4'>
+                <a
+                  href='/register'
+                  className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+                >
                   Sign up
                 </a>
               </div>
@@ -177,9 +193,22 @@ export function LoginForm({
           </form>
         </CardContent>
       </Card>
-      <div className='text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4'>
-        By clicking continue, you agree to our <a href='#'>Terms of Service</a>{' '}
-        and <a href='#'>Privacy Policy</a>.
+      <div className='text-muted-foreground text-center text-xs text-balance'>
+        By clicking continue, you agree to our{' '}
+        <a
+          href='#'
+          className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+        >
+          Terms of Service
+        </a>{' '}
+        and{' '}
+        <a
+          href='#'
+          className='underline underline-offset-4 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
+        >
+          Privacy Policy
+        </a>
+        .
       </div>
     </div>
   )

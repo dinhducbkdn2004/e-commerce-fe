@@ -1,5 +1,7 @@
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { MainLayout } from '@/layouts'
+import EmailVerificationPage from '@pages/EmailVerification/EmailVerificationPage'
+import ResendVerificationPage from '@pages/EmailVerification/ResendVerificationPage'
 import Home from '@pages/Home/Home'
 import LoginPage from '@pages/LoginPage/LoginPage'
 import NotFound from '@pages/NotFound/NotFound'
@@ -29,6 +31,13 @@ function App() {
               <RegisterPage />
             </ProtectedRoute>
           }
+        />
+
+        {/* Email verification routes - public access */}
+        <Route path='/auth/verify-email' element={<EmailVerificationPage />} />
+        <Route
+          path='/auth/resend-verification'
+          element={<ResendVerificationPage />}
         />
 
         {/* Protected routes - only for authenticated users */}

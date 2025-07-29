@@ -30,9 +30,25 @@ export const useAuth = () => {
       return result
     } catch (err) {
       const errorMessage = getErrorMessage(err)
-      toast.error('Login Failed', {
-        description: errorMessage,
-      })
+
+      // Check if error is due to unverified email
+      if (err instanceof Error && err.message.includes('xác thực email')) {
+        toast.error('Email chưa xác thực', {
+          description: 'Vui lòng kiểm tra email và xác thực tài khoản của bạn.',
+          action: {
+            label: 'Gửi lại email',
+            onClick: () => {
+              // Navigate to resend verification page
+              window.location.href = '/auth/resend-verification'
+            },
+          },
+          duration: 10000, // Show longer for important message
+        })
+      } else {
+        toast.error('Login Failed', {
+          description: errorMessage,
+        })
+      }
       throw err
     } finally {
       setIsLoading(false)
@@ -53,7 +69,9 @@ export const useAuth = () => {
 
       const result = await authService.register(apiData)
       toast.success('Registration Successful!', {
-        description: 'Your account has been created. Please login to continue.',
+        description:
+          'Please check your email to verify your account before signing in.',
+        duration: 6000, // Show longer for important message
       })
       return result
     } catch (err) {

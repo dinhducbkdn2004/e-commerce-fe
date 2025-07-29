@@ -66,3 +66,7 @@ temp/
 
 # Runtime files
 *.tsbuildinfo
+
+# Documentation files (except README.md)
+*.md
+!README.md

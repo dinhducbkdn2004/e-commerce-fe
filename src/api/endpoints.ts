@@ -27,6 +27,9 @@ export const authApi = {
 
   resetPassword: (data: { token: string; password: string }) =>
     apiClient.post('/auth/reset-password', data),
+
+  resendVerificationEmail: (email: string) =>
+    apiClient.post('/auth/resend-verification-email', { email }),
 }
 
 // Users API endpoints

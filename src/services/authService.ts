@@ -113,6 +113,10 @@ class AuthService {
   async resetPassword(token: string, password: string): Promise<void> {
     await authApi.resetPassword({ token, password })
   }
+
+  async resendVerificationEmail(email: string): Promise<void> {
+    await authApi.resendVerificationEmail(email)
+  }
 }
 
 export const authService = new AuthService()

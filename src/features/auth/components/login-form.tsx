@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { validateLoginForm } from '@/schemas/validation'
 import type { FirebaseUserLite, LoginForm as LoginFormType } from '@/types'
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export function LoginForm({
@@ -154,12 +154,12 @@ export function LoginForm({
                 <div className='grid gap-3'>
                   <div className='flex items-center'>
                     <Label htmlFor='password'>Password</Label>
-                    <a
-                      href='#'
+                    <Link
+                      to='/forgot-password'
                       className='ml-auto text-sm underline-offset-4 hover:underline text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300'
                     >
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                   <Input
                     id='password'

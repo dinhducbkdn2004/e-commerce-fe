@@ -110,8 +110,8 @@ class AuthService {
     await authApi.forgotPassword(email)
   }
 
-  async resetPassword(token: string, password: string): Promise<void> {
-    await authApi.resetPassword({ token, password })
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    await authApi.resetPassword({ token, newPassword })
   }
 
   async resendVerificationEmail(email: string): Promise<void> {

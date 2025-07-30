@@ -41,7 +41,7 @@ const ResendVerificationPage = () => {
     if (isSuccess) {
       return (
         <div className='text-center space-y-6'>
-          <div className='mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center'>
+          <div className='mx-auto w-16 h-16 rounded-full flex items-center justify-center'>
             <CheckCircle className='w-8 h-8 text-green-600' />
           </div>
           <div className='space-y-2'>
@@ -81,7 +81,7 @@ const ResendVerificationPage = () => {
     return (
       <div className='space-y-6'>
         <div className='text-center space-y-2'>
-          <div className='mx-auto w-16 h-16 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center'>
+          <div className='mx-auto w-16 h-16 rounded-full flex items-center justify-center'>
             <Mail className='w-8 h-8 text-purple-600' />
           </div>
           <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
@@ -145,7 +145,7 @@ const ResendVerificationPage = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 flex items-center justify-center p-6'>
+    <div className='min-h-screen flex items-center justify-center p-6'>
       <Card className='w-full max-w-md bg-white/70 dark:bg-gray-900/80 backdrop-blur-xl border border-white/60 dark:border-gray-600/60 shadow-2xl shadow-purple-500/20'>
         <CardHeader className='pb-4'>
           <div className='flex items-center justify-center mb-4'>

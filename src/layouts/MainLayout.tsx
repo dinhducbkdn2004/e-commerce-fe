@@ -15,7 +15,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const { isAuthenticated, isLoading } = useAuthContext()
 
   // Pages that need full viewport (no header padding)
-  const fullViewportPages = ['/login', '/register']
+  const fullViewportPages = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/auth/verify-email',
+    '/auth/resend-verification',
+    '/auth/reset-password',
+  ]
 
   // Pages that need minimal padding (like home)
   const minimalPaddingPages = ['/']

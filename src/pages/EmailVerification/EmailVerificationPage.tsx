@@ -157,7 +157,7 @@ const EmailVerificationPage = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 flex items-center justify-center p-6'>
+    <div className='min-h-screen y flex items-center justify-center p-6'>
       <Card className='w-full max-w-md bg-white/70 dark:bg-gray-900/80 backdrop-blur-xl border border-white/60 dark:border-gray-600/60 shadow-2xl shadow-purple-500/20'>
         <CardHeader className='pb-4'>
           <div className='flex items-center justify-center mb-4'>

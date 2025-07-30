@@ -88,3 +88,46 @@ export const validateRegisterForm = (data: {
     errors,
   }
 }
+
+export const validateForgotPasswordForm = (data: {
+  email: string
+}): ValidationResult => {
+  const errors: string[] = []
+
+  if (!data.email) {
+    errors.push('Email is required')
+  } else if (!isValidEmail(data.email)) {
+    errors.push('Please enter a valid email address')
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  }
+}
+
+export const validateResetPasswordForm = (data: {
+  newPassword: string
+  confirmPassword: string
+}): ValidationResult => {
+  const errors: string[] = []
+
+  if (!data.newPassword) {
+    errors.push('Password is required')
+  } else if (!isValidPassword(data.newPassword)) {
+    errors.push(
+      `Password must be at least ${VALIDATION.PASSWORD_MIN_LENGTH} characters`
+    )
+  }
+
+  if (!data.confirmPassword) {
+    errors.push('Please confirm your password')
+  } else if (data.newPassword !== data.confirmPassword) {
+    errors.push('Passwords do not match')
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  }
+}

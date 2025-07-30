@@ -2,10 +2,12 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import { MainLayout } from '@/layouts'
 import EmailVerificationPage from '@pages/EmailVerification/EmailVerificationPage'
 import ResendVerificationPage from '@pages/EmailVerification/ResendVerificationPage'
+import ForgotPasswordPage from '@pages/ForgotPasswordPage/ForgotPasswordPage'
 import Home from '@pages/Home/Home'
 import LoginPage from '@pages/LoginPage/LoginPage'
 import NotFound from '@pages/NotFound/NotFound'
 import RegisterPage from '@pages/RegisterPage/RegisterPage'
+import ResetPasswordPage from '@pages/ResetPasswordPage/ResetPasswordPage'
 import { Route, Routes } from 'react-router-dom'
 
 function App() {
@@ -32,12 +34,36 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <ForgotPasswordPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <ResetPasswordPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Email verification routes - public access */}
         <Route path='/auth/verify-email' element={<EmailVerificationPage />} />
         <Route
           path='/auth/resend-verification'
           element={<ResendVerificationPage />}
+        />
+        <Route
+          path='/auth/reset-password'
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <ResetPasswordPage />
+            </ProtectedRoute>
+          }
         />
 
         {/* Protected routes - only for authenticated users */}

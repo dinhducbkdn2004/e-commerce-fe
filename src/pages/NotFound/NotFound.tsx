@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function NotFound() {
   return (
-    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4'>
+    <div className='min-h-screen flex items-center justify-center px-4'>
       <div className='text-center'>
         <h1 className='text-9xl font-bold text-gray-200 dark:text-gray-700'>
           404
@@ -15,7 +15,7 @@ export default function NotFound() {
         </p>
         <Link
           to='/'
-          className='inline-flex items-center px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors'
+          className='inline-flex items-center px-6 py-3 dark:bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors'
         >
           <svg
             className='w-4 h-4 mr-2'

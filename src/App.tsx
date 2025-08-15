@@ -6,6 +6,8 @@ import ForgotPasswordPage from '@pages/ForgotPasswordPage/ForgotPasswordPage'
 import Home from '@pages/Home/Home'
 import LoginPage from '@pages/LoginPage/LoginPage'
 import NotFound from '@pages/NotFound/NotFound'
+import ProductDetailPage from '@pages/Products/ProductDetailPage'
+import ProductListingPage from '@pages/Products/ProductListingPage'
 import RegisterPage from '@pages/RegisterPage/RegisterPage'
 import ResetPasswordPage from '@pages/ResetPasswordPage/ResetPasswordPage'
 import { Route, Routes } from 'react-router-dom'
@@ -16,6 +18,8 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path='/' element={<Home />} />
+        <Route path='/products' element={<ProductListingPage />} />
+        <Route path='/products/:id' element={<ProductDetailPage />} />
 
         {/* Auth routes - only for non-authenticated users */}
         <Route

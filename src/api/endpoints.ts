@@ -52,11 +52,10 @@ export const productsApi = {
 
   getProductById: (id: string) => apiClient.get(`/products/${id}`),
 
+  // for future admin use
   createProduct: (data: unknown) => apiClient.post('/products', data),
-
   updateProduct: (id: string, data: unknown) =>
     apiClient.put(`/products/${id}`, data),
-
   deleteProduct: (id: string) => apiClient.delete(`/products/${id}`),
 }
 

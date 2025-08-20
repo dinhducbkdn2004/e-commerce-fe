@@ -1,14 +1,15 @@
+import Breadcrumb from '@/components/Breadcrumb'
+import MobileSidebar from '@/components/MobileSidebar'
 import ProductCard from '@/components/ProductCard'
-import { Badge } from '@/components/ui/badge'
+import ProductSidebar from '@/components/ProductSidebar'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   productService,
   type GetProductsParams,
 } from '@/services/productService'
 import type { ProductDTO } from '@/types/product'
-import { debounce } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
+import { ChevronLeft, ChevronRight, Filter, Grid, List } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export default function ProductListingPage() {
@@ -16,6 +17,8 @@ export default function ProductListingPage() {
   const [products, setProducts] = useState<ProductDTO[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [total, setTotal] = useState<number>(0)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   // URL params
   const page = parseInt(searchParams.get('page') || '1')
@@ -26,32 +29,14 @@ export default function ProductListingPage() {
   const minPrice = searchParams.get('minPrice') || ''
   const maxPrice = searchParams.get('maxPrice') || ''
 
-  // Local state for filters
-  const [searchInput, setSearchInput] = useState(search)
-  const [priceRange, setPriceRange] = useState({ min: minPrice, max: maxPrice })
-
-  // Debounced search function
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((value: string) => {
-        const params = new URLSearchParams(searchParams)
-        if (value) {
-          params.set('search', value)
-        } else {
-          params.delete('search')
-        }
-        params.set('page', '1')
-        setSearchParams(params)
-      }, 500),
-    [searchParams, setSearchParams]
-  )
-
   // Filter functions
-  const updateURLParams = (updates: Record<string, string | null>) => {
+  const updateURLParams = (
+    updates: Record<string, string | number | null | undefined>
+  ) => {
     const params = new URLSearchParams(searchParams)
     Object.entries(updates).forEach(([key, value]) => {
-      if (value) {
-        params.set(key, value)
+      if (value !== null && value !== undefined && value !== '') {
+        params.set(key, value.toString())
       } else {
         params.delete(key)
       }
@@ -62,8 +47,17 @@ export default function ProductListingPage() {
 
   const clearFilters = () => {
     setSearchParams({})
-    setSearchInput('')
-    setPriceRange({ min: '', max: '' })
+  }
+
+  const handleFilterChange = (filters: {
+    search?: string
+    category?: string
+    minPrice?: number
+    maxPrice?: number
+    sortBy?: string
+    sortOrder?: string
+  }) => {
+    updateURLParams(filters)
   }
 
   useEffect(() => {
@@ -103,235 +97,276 @@ export default function ProductListingPage() {
     }
   }, [page, search, category, sortBy, sortOrder, minPrice, maxPrice])
 
-  // Search input handler
-  useEffect(() => {
-    debouncedSearch(searchInput)
-  }, [searchInput, debouncedSearch])
-
   const pages = Math.ceil(total / 12)
 
   return (
-    <div className='container mx-auto px-4'>
-      {/* Header */}
-      <div className='mb-6'>
-        <h1 className='text-2xl font-bold mb-4'>Sản phẩm</h1>
+    <div className='min-h-screen'>
+      {/* Mobile Sidebar */}
+      <MobileSidebar
+        isOpen={showMobileFilters}
+        onClose={() => setShowMobileFilters(false)}
+        currentFilters={{
+          search,
+          category,
+          minPrice,
+          maxPrice,
+          sortBy,
+          sortOrder,
+        }}
+        onFilterChange={handleFilterChange}
+        onClearFilters={clearFilters}
+        totalProducts={total}
+      />
 
-        {/* Search and Filters */}
-        <div className='space-y-4'>
-          {/* Search Bar */}
-          <div className='flex gap-4'>
-            <div className='flex-1'>
-              <Input
-                type='text'
-                placeholder='Tìm kiếm sản phẩm...'
-                value={searchInput}
-                onChange={e => setSearchInput(e.target.value)}
-                className='w-full'
-              />
-            </div>
-            <Button onClick={clearFilters} variant='outline'>
-              Xóa bộ lọc
-            </Button>
-          </div>
+      <div className='container mx-auto px-4 py-6'>
+        {/* Breadcrumb */}
+        <Breadcrumb items={[{ label: 'Sản phẩm' }]} />
 
-          {/* Price Filter */}
-          <div className='flex gap-4 items-center'>
-            <span className='text-sm font-medium'>Khoảng giá:</span>
-            <Input
-              type='number'
-              placeholder='Giá từ'
-              value={priceRange.min}
-              onChange={e =>
-                setPriceRange(prev => ({ ...prev, min: e.target.value }))
-              }
-              className='w-32'
+        <div className='flex gap-6'>
+          {/* Desktop Sidebar */}
+          <div className='hidden lg:block flex-shrink-0'>
+            <ProductSidebar
+              currentFilters={{
+                search,
+                category,
+                minPrice,
+                maxPrice,
+                sortBy,
+                sortOrder,
+              }}
+              onFilterChange={handleFilterChange}
+              onClearFilters={clearFilters}
+              totalProducts={total}
             />
-            <span>-</span>
-            <Input
-              type='number'
-              placeholder='Giá đến'
-              value={priceRange.max}
-              onChange={e =>
-                setPriceRange(prev => ({ ...prev, max: e.target.value }))
-              }
-              className='w-32'
-            />
-            <Button
-              onClick={() =>
-                updateURLParams({
-                  minPrice: priceRange.min || null,
-                  maxPrice: priceRange.max || null,
-                })
-              }
-              size='sm'
-            >
-              Áp dụng
-            </Button>
           </div>
 
-          {/* Sort Options */}
-          <div className='flex gap-4 items-center flex-wrap'>
-            <span className='text-sm font-medium'>Sắp xếp:</span>
-            <div className='flex gap-2'>
-              <Button
-                variant={sortBy === 'createdAt' ? 'default' : 'outline'}
-                size='sm'
-                onClick={() =>
-                  updateURLParams({ sortBy: 'createdAt', sortOrder: 'desc' })
-                }
-              >
-                Mới nhất
-              </Button>
-              <Button
-                variant={
-                  sortBy === 'price' && sortOrder === 'asc'
-                    ? 'default'
-                    : 'outline'
-                }
-                size='sm'
-                onClick={() =>
-                  updateURLParams({ sortBy: 'price', sortOrder: 'asc' })
-                }
-              >
-                Giá thấp - cao
-              </Button>
-              <Button
-                variant={
-                  sortBy === 'price' && sortOrder === 'desc'
-                    ? 'default'
-                    : 'outline'
-                }
-                size='sm'
-                onClick={() =>
-                  updateURLParams({ sortBy: 'price', sortOrder: 'desc' })
-                }
-              >
-                Giá cao - thấp
-              </Button>
-              <Button
-                variant={sortBy === 'rating' ? 'default' : 'outline'}
-                size='sm'
-                onClick={() =>
-                  updateURLParams({ sortBy: 'rating', sortOrder: 'desc' })
-                }
-              >
-                Đánh giá cao
-              </Button>
-              <Button
-                variant={sortBy === 'sales' ? 'default' : 'outline'}
-                size='sm'
-                onClick={() =>
-                  updateURLParams({ sortBy: 'sales', sortOrder: 'desc' })
-                }
-              >
-                Bán chạy
-              </Button>
-            </div>
-          </div>
+          {/* Main Content */}
+          <div className='flex-1'>
+            {/* Header */}
+            <div className='mb-6'>
+              <div className='flex items-center justify-between mb-4'>
+                <h1 className='text-3xl font-bold text-foreground'>Sản phẩm</h1>
 
-          {/* Active Filters Display */}
-          {(search || minPrice || maxPrice || category) && (
-            <div className='flex gap-2 items-center flex-wrap'>
-              <span className='text-sm font-medium'>Bộ lọc đang áp dụng:</span>
-              {search && (
-                <Badge
-                  variant='secondary'
-                  className='cursor-pointer'
-                  onClick={() => {
-                    setSearchInput('')
-                    updateURLParams({ search: null })
-                  }}
-                >
-                  Tìm kiếm: {search} ×
-                </Badge>
-              )}
-              {minPrice && (
-                <Badge
-                  variant='secondary'
-                  className='cursor-pointer'
-                  onClick={() => {
-                    setPriceRange(prev => ({ ...prev, min: '' }))
-                    updateURLParams({ minPrice: null })
-                  }}
-                >
-                  Từ: {parseInt(minPrice).toLocaleString('vi-VN')}₫ ×
-                </Badge>
-              )}
-              {maxPrice && (
-                <Badge
-                  variant='secondary'
-                  className='cursor-pointer'
-                  onClick={() => {
-                    setPriceRange(prev => ({ ...prev, max: '' }))
-                    updateURLParams({ maxPrice: null })
-                  }}
-                >
-                  Đến: {parseInt(maxPrice).toLocaleString('vi-VN')}₫ ×
-                </Badge>
+                {/* View Toggle */}
+                <div className='hidden sm:flex items-center gap-2 bg-muted rounded-lg p-1'>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === 'grid'
+                        ? ' text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Grid className='h-4 w-4' />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === 'list'
+                        ? 'text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <List className='h-4 w-4' />
+                  </button>
+                </div>
+              </div>
+
+              {/* Results Summary */}
+              {!loading && (
+                <div className='text-sm text-muted-foreground'>
+                  {total > 0 ? (
+                    <>
+                      Hiển thị {(page - 1) * 12 + 1}-
+                      {Math.min(page * 12, total)} trong tổng số {total} sản
+                      phẩm
+                    </>
+                  ) : (
+                    'Không tìm thấy sản phẩm nào'
+                  )}
+                </div>
               )}
             </div>
-          )}
+
+            {/* Mobile Filters Button */}
+            <div className='lg:hidden mb-6'>
+              <Button
+                variant='outline'
+                className='w-full flex items-center justify-center gap-2'
+                onClick={() => setShowMobileFilters(true)}
+              >
+                <Filter className='h-4 w-4' />
+                Bộ lọc và sắp xếp
+              </Button>
+            </div>
+
+            {/* Products Grid */}
+            {loading ? (
+              <div
+                className={`grid gap-6 ${
+                  viewMode === 'grid'
+                    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                    : 'grid-cols-1'
+                }`}
+              >
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-xl bg-muted animate-pulse ${
+                      viewMode === 'grid' ? 'h-64' : 'h-32'
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : products.length === 0 ? (
+              <div className='text-center py-12'>
+                <div className='text-muted-foreground text-lg'>
+                  Không tìm thấy sản phẩm nào
+                </div>
+                <Button
+                  variant='outline'
+                  onClick={clearFilters}
+                  className='mt-4'
+                >
+                  Xóa bộ lọc
+                </Button>
+              </div>
+            ) : (
+              <div
+                className={`grid gap-6 ${
+                  viewMode === 'grid'
+                    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                    : 'grid-cols-1'
+                }`}
+              >
+                {products.map(product => (
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    viewMode={viewMode}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {pages > 1 && (
+              <div className='flex items-center justify-center gap-4 mt-12'>
+                <Button
+                  variant='outline'
+                  disabled={page <= 1}
+                  onClick={() =>
+                    updateURLParams({ page: Math.max(1, page - 1) })
+                  }
+                  className='flex items-center gap-2'
+                >
+                  <ChevronLeft className='h-4 w-4' />
+                  Trước
+                </Button>
+
+                <div className='flex items-center gap-2'>
+                  {Array.from({ length: Math.min(5, pages) }, (_, i) => {
+                    const pageNum = i + 1
+                    if (pages > 5) {
+                      // Show smart pagination for many pages
+                      if (page <= 3) {
+                        // Show 1,2,3,4,5 ... last
+                        if (i < 5) {
+                          return (
+                            <Button
+                              key={pageNum}
+                              variant={page === pageNum ? 'default' : 'outline'}
+                              size='sm'
+                              onClick={() => updateURLParams({ page: pageNum })}
+                              className='w-10 h-10'
+                            >
+                              {pageNum}
+                            </Button>
+                          )
+                        }
+                      } else if (page >= pages - 2) {
+                        // Show first ... last-4,last-3,last-2,last-1,last
+                        const showPageNum = pages - 4 + i
+                        return (
+                          <Button
+                            key={showPageNum}
+                            variant={
+                              page === showPageNum ? 'default' : 'outline'
+                            }
+                            size='sm'
+                            onClick={() =>
+                              updateURLParams({ page: showPageNum })
+                            }
+                            className='w-10 h-10'
+                          >
+                            {showPageNum}
+                          </Button>
+                        )
+                      } else {
+                        // Show first ... page-1,page,page+1 ... last
+                        const showPageNum = page - 2 + i
+                        return (
+                          <Button
+                            key={showPageNum}
+                            variant={
+                              page === showPageNum ? 'default' : 'outline'
+                            }
+                            size='sm'
+                            onClick={() =>
+                              updateURLParams({ page: showPageNum })
+                            }
+                            className='w-10 h-10'
+                          >
+                            {showPageNum}
+                          </Button>
+                        )
+                      }
+                    } else {
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={page === pageNum ? 'default' : 'outline'}
+                          size='sm'
+                          onClick={() => updateURLParams({ page: pageNum })}
+                          className='w-10 h-10'
+                        >
+                          {pageNum}
+                        </Button>
+                      )
+                    }
+                  })}
+
+                  {pages > 5 && page < pages - 2 && (
+                    <>
+                      <span className='text-muted-foreground'>...</span>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={() => updateURLParams({ page: pages })}
+                        className='w-10 h-10'
+                      >
+                        {pages}
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                <Button
+                  variant='outline'
+                  disabled={page >= pages}
+                  onClick={() =>
+                    updateURLParams({ page: Math.min(pages, page + 1) })
+                  }
+                  className='flex items-center gap-2'
+                >
+                  Sau
+                  <ChevronRight className='h-4 w-4' />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Results Summary */}
-      {!loading && (
-        <div className='mb-4 text-sm text-muted-foreground'>
-          {total > 0 ? (
-            <>
-              Hiển thị {(page - 1) * 12 + 1}-{Math.min(page * 12, total)} trong
-              tổng số {total} sản phẩm
-            </>
-          ) : (
-            'Không tìm thấy sản phẩm nào'
-          )}
-        </div>
-      )}
-
-      {loading ? (
-        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className='h-64 rounded-xl bg-muted animate-pulse' />
-          ))}
-        </div>
-      ) : products.length === 0 ? (
-        <div className='text-center text-muted-foreground'>
-          Chưa có sản phẩm nào
-        </div>
-      ) : (
-        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
-          {products.map(p => (
-            <ProductCard key={p._id} product={p} />
-          ))}
-        </div>
-      )}
-
-      {/* Pagination */}
-      {pages > 1 && (
-        <div className='flex items-center justify-center gap-2 mt-8'>
-          <Button
-            variant='outline'
-            disabled={page <= 1}
-            onClick={() =>
-              updateURLParams({ page: Math.max(1, page - 1).toString() })
-            }
-          >
-            Trước
-          </Button>
-          <span className='text-sm px-4'>
-            Trang {page} / {pages}
-          </span>
-          <Button
-            variant='outline'
-            disabled={page >= pages}
-            onClick={() =>
-              updateURLParams({ page: Math.min(pages, page + 1).toString() })
-            }
-          >
-            Sau
-          </Button>
-        </div>
-      )}
     </div>
   )
 }

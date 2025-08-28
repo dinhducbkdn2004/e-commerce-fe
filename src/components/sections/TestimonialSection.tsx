@@ -83,7 +83,7 @@ export default function TestimonialSection() {
   ]
 
   return (
-    <section className='py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20'>
+    <section className='py-16 sm:py-20 lg:py-24 bg-brand-primary'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Section Header */}
         <div className='text-center mb-12 lg:mb-16'>

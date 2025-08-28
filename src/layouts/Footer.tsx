@@ -69,7 +69,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className='bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 border-t border-purple-200 dark:border-purple-800'>
+    <footer className='bg-brand-primary border-t border-purple-200 dark:border-purple-800'>
       <div className='container mx-auto px-4 py-12 lg:py-16'>
         {/* Main Footer Content */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12'>
@@ -204,10 +204,6 @@ export default function Footer() {
           <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
             <div className='flex flex-col sm:flex-row items-center gap-4 text-sm text-gray-500 dark:text-gray-400'>
               <p>© {currentYear} BeeLuxe. All rights reserved.</p>
-              <div className='flex items-center gap-4'>
-                <span className='hidden sm:block'>•</span>
-                <span>Made with ❤️ in New York</span>
-              </div>
             </div>
 
             <div className='flex flex-wrap items-center gap-6 text-sm'>
@@ -255,9 +251,9 @@ export default function Footer() {
             </div>
 
             <div className='flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400'>
-              <span>🔒 SSL Secured</span>
+              <span>SSL secured</span>
               <span>•</span>
-              <span>📦 Free shipping over $100</span>
+              <span>Free shipping over $100</span>
             </div>
           </div>
         </div>

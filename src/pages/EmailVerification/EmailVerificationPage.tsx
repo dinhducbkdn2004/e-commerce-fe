@@ -163,7 +163,7 @@ const EmailVerificationPage = () => {
           <div className='flex items-center justify-center mb-4'>
             <div className='relative'>
               <div className='w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 transform rotate-45 rounded-sm'></div>
-              <div className='absolute inset-1 bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 transform rotate-45 rounded-sm'></div>
+              <div className='absolute inset-1 bg-auth-section transform rotate-45 rounded-sm'></div>
             </div>
             <span className='ml-3 text-xl font-light tracking-wider text-gray-900 dark:text-white'>
               Bee

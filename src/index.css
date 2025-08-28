@@ -4,6 +4,236 @@
 /* Custom dark mode variant */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* BeeLuxe Custom Theme Variables */
+:root {
+  --beeluxe-primary: 124 58 237; /* purple-600 */
+  --beeluxe-primary-dark: 109 40 217; /* purple-700 */
+  --beeluxe-secondary: 99 102 241; /* indigo-600 */
+  --beeluxe-secondary-dark: 79 70 229; /* indigo-700 */
+  --beeluxe-accent: 168 85 247; /* purple-500 */
+  --beeluxe-surface: 252 248 255; /* purple-50 */
+  --beeluxe-surface-hover: 245 243 255; /* purple-100 */
+  --beeluxe-surface-secondary: 255 251 235; /* amber-50 */
+
+  /* Light theme enhanced colors */
+  --beeluxe-bg-primary: 254 252 232; /* yellow-50 */
+  --beeluxe-bg-secondary: 250 245 255; /* purple-50 */
+  --beeluxe-bg-card: rgba(255, 255, 255, 0.95);
+  --beeluxe-border: rgba(124, 58, 237, 0.2);
+
+  /* Gradient definitions */
+  --beeluxe-gradient-primary: linear-gradient(
+    135deg,
+    rgb(124 58 237),
+    rgb(99 102 241)
+  );
+  --beeluxe-gradient-hover: linear-gradient(
+    135deg,
+    rgb(109 40 217),
+    rgb(79 70 229)
+  );
+  --beeluxe-gradient-subtle: linear-gradient(
+    135deg,
+    rgb(250 245 255),
+    rgb(254 252 232)
+  );
+  --beeluxe-gradient-warm: linear-gradient(
+    135deg,
+    rgb(252 248 255),
+    rgb(255 251 235)
+  );
+}
+
+.dark {
+  --beeluxe-primary: 147 51 234; /* purple-500 */
+  --beeluxe-primary-dark: 124 58 237; /* purple-600 */
+  --beeluxe-secondary: 129 140 248; /* indigo-400 */
+  --beeluxe-secondary-dark: 99 102 241; /* indigo-600 */
+  --beeluxe-accent: 196 181 253; /* purple-300 */
+  --beeluxe-surface: 31 41 55; /* slate-800 */
+  --beeluxe-surface-hover: 51 65 85; /* slate-700 */
+
+  /* Dark mode gradients */
+  --beeluxe-gradient-primary: linear-gradient(
+    135deg,
+    rgb(147 51 234),
+    rgb(129 140 248)
+  );
+  --beeluxe-gradient-hover: linear-gradient(
+    135deg,
+    rgb(124 58 237),
+    rgb(99 102 241)
+  );
+  --beeluxe-gradient-subtle: linear-gradient(
+    135deg,
+    rgb(31 41 55),
+    rgb(51 65 85)
+  );
+}
+
+/* BeeLuxe utility classes */
+.bg-beeluxe-gradient {
+  background: var(--beeluxe-gradient-primary);
+}
+
+.bg-beeluxe-gradient:hover {
+  background: var(--beeluxe-gradient-hover);
+}
+
+.text-beeluxe-primary {
+  color: rgb(var(--beeluxe-primary));
+}
+
+.border-beeluxe-primary {
+  border-color: rgb(var(--beeluxe-primary));
+}
+
+.bg-beeluxe-surface {
+  background-color: rgb(var(--beeluxe-surface));
+}
+
+.bg-beeluxe-surface:hover {
+  background-color: rgb(var(--beeluxe-surface-hover));
+}
+
+/* Enhanced page backgrounds with subtle patterns */
+.bg-beeluxe-page {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(252, 248, 255, 0.95) 0%,
+      rgba(250, 245, 255, 0.85) 25%,
+      rgba(254, 252, 232, 0.8) 50%,
+      rgba(250, 245, 255, 0.85) 75%,
+      rgba(252, 248, 255, 0.95) 100%
+    ),
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(124, 58, 237, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(99, 102, 241, 0.06) 0%,
+      transparent 50%
+    );
+}
+
+.dark .bg-beeluxe-page {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(17, 24, 39, 0.95) 0%,
+      rgba(31, 41, 55, 0.9) 25%,
+      rgba(55, 65, 81, 0.85) 50%,
+      rgba(31, 41, 55, 0.9) 75%,
+      rgba(17, 24, 39, 0.95) 100%
+    ),
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(124, 58, 237, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(99, 102, 241, 0.1) 0%,
+      transparent 50%
+    );
+}
+
+/* Glass morphism cards */
+.card-glass {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(124, 58, 237, 0.12);
+}
+
+.dark .card-glass {
+  background: rgba(31, 41, 55, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Tabs styling for BeeLuxe theme */
+[data-state='active'][role='tab'] {
+  background: linear-gradient(
+    135deg,
+    rgb(124 58 237),
+    rgb(99 102 241)
+  ) !important;
+  color: white !important;
+  border-color: rgb(124 58 237) !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3) !important;
+}
+
+.dark [data-state='active'][role='tab'] {
+  background: linear-gradient(
+    135deg,
+    rgb(147 51 234),
+    rgb(129 140 248)
+  ) !important;
+  color: white !important;
+  border-color: rgb(147 51 234) !important;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4) !important;
+}
+
+/* Enhanced button hover states */
+.btn-beeluxe {
+  background: linear-gradient(135deg, rgb(124 58 237), rgb(99 102 241));
+  border: none;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-beeluxe:hover {
+  background: linear-gradient(135deg, rgb(109 40 217), rgb(79 70 229));
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Theme transition optimization - Reduced specificity and improved performance */
+html {
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Specific transitions for better performance */
+*:not(img):not(video):not(svg):not(canvas) {
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions during page load and theme changes */
+.preload *,
+.theme-transitioning * {
+  transition: none !important;
+}
+
+/* Optimized dark mode class application */
+.dark {
+  color-scheme: dark;
+}
+
+.light {
+  color-scheme: light;
+}
+
+/* Performance optimization for animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Smooth scrolling and enhanced UX */
 * {
   box-sizing: border-box;
@@ -113,6 +343,30 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
+
+  /* Brand Gradient Variables - Light Mode */
+  --brand-gradient-from: #f8fafc; /* purple-50 equivalent */
+  --brand-gradient-via: #e0e7ff; /* indigo-50 equivalent */
+  --brand-gradient-to: #dbeafe; /* blue-50 equivalent */
+
+  /* Primary brand gradients */
+  --brand-gradient: linear-gradient(
+    to bottom right,
+    var(--brand-gradient-from),
+    var(--brand-gradient-via),
+    var(--brand-gradient-to)
+  );
+  --brand-gradient-light: linear-gradient(
+    to bottom right,
+    #f8fafc,
+    #e0e7ff,
+    #dbeafe
+  );
+
+  /* Component-specific gradients */
+  --hero-gradient: linear-gradient(to bottom right, #f8fafc, #e0e7ff, #dbeafe);
+  --auth-gradient: linear-gradient(to bottom right, #f8fafc, #e0e7ff, #dbeafe);
+  --card-gradient: linear-gradient(to bottom right, #f8fafc, #e0e7ff, #dbeafe);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -238,6 +492,45 @@ body {
 }
 
 .dark {
+  /* Dark mode brand gradient variables */
+  --brand-gradient-from: #111827; /* gray-900 */
+  --brand-gradient-via: rgba(124, 58, 237, 0.2); /* purple-900/20 */
+  --brand-gradient-to: rgba(79, 70, 229, 0.2); /* indigo-900/20 */
+
+  /* Primary brand gradients - Dark Mode */
+  --brand-gradient: linear-gradient(
+    to bottom right,
+    var(--brand-gradient-from),
+    var(--brand-gradient-via),
+    var(--brand-gradient-to)
+  );
+  --brand-gradient-dark: linear-gradient(
+    to bottom right,
+    #111827,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.2)
+  );
+
+  /* Component-specific gradients - Dark Mode */
+  --hero-gradient: linear-gradient(
+    to bottom right,
+    #111827,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.2)
+  );
+  --auth-gradient: linear-gradient(
+    to bottom right,
+    #111827,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.2)
+  );
+  --card-gradient: linear-gradient(
+    to bottom right,
+    #111827,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.2)
+  );
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -277,5 +570,29 @@ body {
   }
   body {
     @apply text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Brand gradient utilities */
+  .bg-brand-primary {
+    background: var(--brand-gradient);
+  }
+
+  .bg-hero-section {
+    background: var(--hero-gradient);
+  }
+
+  .bg-auth-section {
+    background: var(--auth-gradient);
+  }
+
+  .bg-card-section {
+    background: var(--card-gradient);
+  }
+
+  /* Legacy support - maps old gradient to new system */
+  .bg-legacy-gradient {
+    background: var(--brand-gradient);
   }
 }

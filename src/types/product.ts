@@ -11,7 +11,6 @@ export interface ProductVariant {
   sku?: string
   images?: string[]
 }
-
 export interface ProductDTO {
   _id: string
   name: string
@@ -42,6 +41,30 @@ export interface ProductDTO {
   views: number
   createdAt: string
   updatedAt: string
+  reviews?: Review[]
+  warrantyInformation?: string
+  shippingInformation?: string
+  returnPolicy?: string
+}
+
+// Reviews and Comments
+export interface Review {
+  id: string
+  rating: number
+  comment: string
+  date: string
+  reviewerName: string
+  reviewerEmail?: string
+  helpful?: number
+  verified?: boolean
+}
+
+export interface Comment {
+  id: string
+  username: string
+  content: string
+  date: string
+  replies?: Comment[]
 }
 
 export interface ProductListResponse {

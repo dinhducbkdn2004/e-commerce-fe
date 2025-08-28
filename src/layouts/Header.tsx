@@ -63,13 +63,13 @@ function Header() {
   const navigationItems = [
     {
       name: 'Shop',
-      href: '/shop',
+      href: '/products',
       hasDropdown: true,
       dropdownItems: [
-        { name: 'Bags & Purses', href: '/shop/bags' },
-        { name: 'Clothing', href: '/shop/clothing' },
-        { name: 'Accessories', href: '/shop/accessories' },
-        { name: 'Jewelry', href: '/shop/jewelry' },
+        { name: 'Bags & Purses', href: '/products/bags' },
+        { name: 'Clothing', href: '/products/clothing' },
+        { name: 'Accessories', href: '/products/accessories' },
+        { name: 'Jewelry', href: '/products/jewelry' },
       ],
     },
     { name: 'New Arrivals', href: '/new-arrivals' },
@@ -85,10 +85,10 @@ function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-purple-200/30 dark:border-purple-700/30 ${
+        className={`fixed top-0 bg-gradient-to-r from-purple-50/80 via-indigo-50/80 to-blue-50/80 dark:from-gray-900/80 dark:via-purple-900/20 dark:to-indigo-900/20 left-0 right-0 z-50 transition-all duration-300 border-b border-border ${
           isScrolled
-            ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-lg shadow-purple-500/10 dark:shadow-purple-500/20'
-            : 'bg-gradient-to-r from-purple-50/80 via-indigo-50/80 to-blue-50/80 dark:from-gray-900/80 dark:via-purple-900/20 dark:to-indigo-900/20 backdrop-blur-md'
+            ? 'bg-gradient-to-r dark:from-gray-900/80 dark:via-purple-900/20 backdrop-blur-lg shadow-lg'
+            : ''
         } ${
           scrollDirection === 'down' && isScrolled
             ? '-translate-y-full'
@@ -102,9 +102,9 @@ function Header() {
               <Link to='/' className='flex items-center space-x-2 group'>
                 <div className='relative'>
                   <div className='w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-purple-600 to-indigo-600 transform rotate-45 rounded-sm group-hover:scale-110 transition-transform duration-300'></div>
-                  <div className='absolute inset-1 bg-white dark:bg-gray-900 transform rotate-45 rounded-sm'></div>
+                  <div className='absolute inset-1 bg-background transform rotate-45 rounded-sm'></div>
                 </div>
-                <span className='text-lg sm:text-xl lg:text-2xl font-light tracking-wider text-gray-900 dark:text-white'>
+                <span className='text-lg sm:text-xl lg:text-2xl font-light tracking-wider text-foreground'>
                   Bee
                   <span className='font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600'>
                     Luxe
@@ -119,7 +119,7 @@ function Header() {
                 <div key={item.name} className='relative group'>
                   <Link
                     to={item.href}
-                    className='flex items-center space-x-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors py-2'
+                    className='flex items-center space-x-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2'
                   >
                     <span>{item.name}</span>
                     {item.badge && (
@@ -151,7 +151,7 @@ function Header() {
                           ))}
                           <hr className='my-2 border-purple-200 dark:border-purple-700' />
                           <Link
-                            to='/shop/all'
+                            to='/products'
                             className='block px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-md transition-colors'
                           >
                             View All Products
@@ -351,7 +351,7 @@ function Header() {
                             </Link>
                           ))}
                           <Link
-                            to='/shop/all'
+                            to='/products'
                             className='block px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-md transition-colors mt-2'
                             onClick={() => setIsMobileMenuOpen(false)}
                           >

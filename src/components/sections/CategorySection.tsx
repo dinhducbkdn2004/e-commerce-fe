@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function CategorySection() {
+function CategorySection() {
   const categories = [
     {
       id: 'bags',
@@ -211,3 +212,5 @@ export default function CategorySection() {
     </section>
   )
 }
+
+export default memo(CategorySection)

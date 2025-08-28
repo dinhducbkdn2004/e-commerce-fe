@@ -1,5 +1,6 @@
 import { env } from '@/config'
 import type { ApiResponse, AuthTokens } from '@/types'
+import { requestThrottler } from '@/utils'
 import axios from 'axios'
 
 // Custom error class for API errors
@@ -137,23 +138,35 @@ class ApiClient {
     return localStorage.getItem('access_token')
   }
 
-  // HTTP methods
+  // HTTP methods with throttling
   async get<T>(endpoint: string): Promise<T> {
+    // Wait for throttling if needed
+    await requestThrottler.waitForAvailability(endpoint)
+
     const response = await this.client.get(endpoint)
     return response.data as T
   }
 
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
+    // Wait for throttling if needed
+    await requestThrottler.waitForAvailability(endpoint)
+
     const response = await this.client.post(endpoint, data)
     return response.data as T
   }
 
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
+    // Wait for throttling if needed
+    await requestThrottler.waitForAvailability(endpoint)
+
     const response = await this.client.put(endpoint, data)
     return response.data as T
   }
 
   async delete<T>(endpoint: string): Promise<T> {
+    // Wait for throttling if needed
+    await requestThrottler.waitForAvailability(endpoint)
+
     const response = await this.client.delete(endpoint)
     return response.data as T
   }

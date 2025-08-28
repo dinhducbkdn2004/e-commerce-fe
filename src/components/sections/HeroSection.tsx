@@ -1,11 +1,12 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Heart, ShoppingBag, Star, Users } from 'lucide-react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function HeroSection() {
+function HeroSection() {
   return (
-    <section className='relative overflow-hidden bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20'>
+    <section className='relative overflow-hidden bg-hero-section'>
       {/* Background decorative elements */}
       <div className='absolute inset-0 overflow-hidden'>
         <div className='absolute -top-40 -right-32 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse'></div>
@@ -29,7 +30,7 @@ export default function HeroSection() {
               </div>
 
               {/* Main Heading */}
-              <h1 className='text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-6 leading-tight'>
+              <h1 className='text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-6 leading-tight'>
                 Luxury
                 <span className='text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 block'>
                   Redefined
@@ -119,14 +120,14 @@ export default function HeroSection() {
                       />
                     </div>
                     <div className='text-center'>
-                      <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+                      <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'>
                         Signature Leather Tote
                       </h3>
                       <p className='text-gray-600 dark:text-gray-400 text-sm mb-3'>
                         Handcrafted Italian Leather
                       </p>
                       <div className='flex items-center justify-center space-x-2'>
-                        <span className='text-2xl font-bold text-gray-900 dark:text-white'>
+                        <span className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
                           $299
                         </span>
                         <span className='text-lg text-gray-500 dark:text-gray-400 line-through'>
@@ -151,7 +152,7 @@ export default function HeroSection() {
                         className='w-full h-full object-cover'
                       />
                     </div>
-                    <p className='text-xs font-medium text-gray-900 dark:text-white'>
+                    <p className='text-xs font-medium text-gray-900 dark:text-gray-100'>
                       Designer Watch
                     </p>
                     <p className='text-xs text-gray-500 dark:text-gray-400'>
@@ -168,7 +169,7 @@ export default function HeroSection() {
                         className='w-full h-full object-cover'
                       />
                     </div>
-                    <p className='text-xs font-medium text-gray-900 dark:text-white'>
+                    <p className='text-xs font-medium text-gray-900 dark:text-gray-100'>
                       Silk Scarf
                     </p>
                     <p className='text-xs text-gray-500 dark:text-gray-400'>
@@ -191,21 +192,21 @@ export default function HeroSection() {
             <div className='inline-flex items-center space-x-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-full px-8 py-4 shadow-lg'>
               <div className='flex items-center space-x-2'>
                 <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
-                <span className='text-sm font-medium text-gray-900 dark:text-white'>
+                <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                   Free Shipping
                 </span>
               </div>
               <div className='w-px h-4 bg-gray-300 dark:bg-gray-600'></div>
               <div className='flex items-center space-x-2'>
                 <div className='w-2 h-2 bg-blue-500 rounded-full animate-pulse'></div>
-                <span className='text-sm font-medium text-gray-900 dark:text-white'>
+                <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                   30-Day Returns
                 </span>
               </div>
               <div className='w-px h-4 bg-gray-300 dark:bg-gray-600'></div>
               <div className='flex items-center space-x-2'>
                 <div className='w-2 h-2 bg-purple-500 rounded-full animate-pulse'></div>
-                <span className='text-sm font-medium text-gray-900 dark:text-white'>
+                <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                   Premium Quality
                 </span>
               </div>
@@ -216,3 +217,5 @@ export default function HeroSection() {
     </section>
   )
 }
+
+export default memo(HeroSection)

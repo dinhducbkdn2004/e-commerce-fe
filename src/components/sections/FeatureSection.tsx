@@ -76,7 +76,7 @@ export default function FeatureSection() {
   ]
 
   return (
-    <section className='py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20'>
+    <section className='py-16 sm:py-20 lg:py-24 bg-brand-primary'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Main Feature Hero with Carousel */}
         <div className='relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 mb-20'>

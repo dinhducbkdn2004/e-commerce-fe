@@ -1,3 +1,5 @@
 export * from './errorHandler'
+export * from './formatCurrency'
 export * from './helpers'
+export * from './requestThrottler'
 export * from './storage'

@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { ProductDTO } from '@/types/product'
-import { useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 interface ProductCardProps {
@@ -10,7 +10,7 @@ interface ProductCardProps {
   viewMode?: 'grid' | 'list'
 }
 
-export default function ProductCard({
+const ProductCard = memo(function ProductCard({
   product,
   viewMode = 'grid',
 }: ProductCardProps) {
@@ -24,21 +24,32 @@ export default function ProductCard({
     ? Math.round((1 - product.price / product.originalPrice!) * 100)
     : 0
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    // TODO: Implement add to cart functionality
-    console.log('Add to cart:', product._id)
-    alert(`Đã thêm "${product.name}" vào giỏ hàng!`)
-  }
+  const handleAddToCart = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      // TODO: Implement add to cart functionality
+      console.log('Add to cart:', product._id)
+      alert(`Đã thêm "${product.name}" vào giỏ hàng!`)
+    },
+    [product._id, product.name]
+  )
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true)
+  }, [])
+
+  const handleImageError = useCallback(() => {
+    setImageError(true)
+  }, [])
 
   if (viewMode === 'list') {
     return (
-      <Card className='group overflow-hidden hover:shadow-lg transition-all duration-300 relative'>
+      <Card className='group overflow-hidden hover:shadow-lg transition-all duration-300 relative card-glass'>
         <Link to={`/products/${product._id}`} className='block'>
           <div className='flex'>
             {/* Product Image - List View */}
-            <div className='w-48 h-36 flex-shrink-0 overflow-hidden bg-muted relative'>
+            <div className='w-48 h-36 flex-shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800 relative'>
               {/* Badges */}
               {hasDiscount && (
                 <Badge
@@ -50,7 +61,7 @@ export default function ProductCard({
               )}
 
               {!imageLoaded && !imageError && (
-                <div className='absolute inset-0 bg-muted animate-pulse' />
+                <div className='absolute inset-0 bg-purple-100 dark:bg-purple-900/20 animate-pulse' />
               )}
 
               {!imageError ? (
@@ -61,11 +72,11 @@ export default function ProductCard({
                     imageLoaded ? 'opacity-100' : 'opacity-0'
                   }`}
                   loading='lazy'
-                  onLoad={() => setImageLoaded(true)}
-                  onError={() => setImageError(true)}
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
                 />
               ) : (
-                <div className='h-full w-full flex items-center justify-center bg-muted text-muted-foreground'>
+                <div className='h-full w-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'>
                   <svg
                     className='w-8 h-8'
                     fill='none'
@@ -84,10 +95,10 @@ export default function ProductCard({
 
               {/* Out of Stock Overlay */}
               {isOutOfStock && (
-                <div className='absolute inset-0 bg-black/20 flex items-center justify-center z-20'>
+                <div className='absolute inset-0 bg-gray-900/30 dark:bg-gray-800/50 flex items-center justify-center z-20'>
                   <Badge
                     variant='destructive'
-                    className='text-white bg-black/80'
+                    className='text-white bg-red-600/90 dark:bg-red-700/90 border-0'
                   >
                     Hết hàng
                   </Badge>
@@ -99,7 +110,7 @@ export default function ProductCard({
             <div className='flex-1 p-4'>
               <div className='flex justify-between h-full'>
                 <div className='flex-1 space-y-2'>
-                  <h3 className='text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors'>
+                  <h3 className='text-lg font-semibold line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors'>
                     {product.name}
                   </h3>
 
@@ -158,7 +169,7 @@ export default function ProductCard({
                     {/* Price */}
                     <div className='space-y-1'>
                       <div className='flex items-center gap-2'>
-                        <span className='text-xl font-semibold text-primary'>
+                        <span className='text-xl font-semibold text-purple-600 dark:text-purple-400'>
                           {product.price.toLocaleString('vi-VN')}₫
                         </span>
                       </div>
@@ -175,7 +186,11 @@ export default function ProductCard({
                       disabled={isOutOfStock}
                       variant={isOutOfStock ? 'secondary' : 'default'}
                       size='sm'
-                      className='min-w-[120px]'
+                      className={`min-w-[120px] ${
+                        !isOutOfStock
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200'
+                          : ''
+                      }`}
                     >
                       {isOutOfStock ? 'Hết hàng' : 'Thêm vào giỏ'}
                     </Button>
@@ -191,7 +206,7 @@ export default function ProductCard({
 
   // Grid view (default)
   return (
-    <Card className='group overflow-hidden hover:shadow-lg transition-all duration-300 relative'>
+    <Card className='group overflow-hidden hover:shadow-lg transition-all duration-300 relative card-glass'>
       {/* Discount Badge */}
       {hasDiscount && (
         <Badge variant='destructive' className='absolute top-2 left-2 z-10'>
@@ -208,8 +223,8 @@ export default function ProductCard({
 
       {/* Out of Stock Overlay */}
       {isOutOfStock && (
-        <div className='absolute inset-0 bg-black/20 flex items-center justify-center z-20'>
-          <Badge variant='destructive' className='text-white bg-black/80'>
+        <div className='absolute inset-0 bg-gray-900/30 dark:bg-gray-800/50 flex items-center justify-center z-20'>
+          <Badge variant='destructive' className='text-white bg-red-600/90 dark:bg-red-700/90 border-0'>
             Hết hàng
           </Badge>
         </div>
@@ -217,7 +232,7 @@ export default function ProductCard({
 
       <Link to={`/products/${product._id}`} className='block'>
         {/* Product Image */}
-        <div className='aspect-[4/3] w-full overflow-hidden bg-muted relative'>
+                    <div className='aspect-[4/3] w-full overflow-hidden bg-gray-100 dark:bg-gray-800 relative'>
           {!imageLoaded && !imageError && (
             <div className='absolute inset-0 bg-muted animate-pulse' />
           )}
@@ -230,11 +245,11 @@ export default function ProductCard({
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               loading='lazy'
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
             />
           ) : (
-            <div className='h-full w-full flex items-center justify-center bg-muted text-muted-foreground'>
+            <div className='h-full w-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'>
               <svg
                 className='w-12 h-12'
                 fill='none'
@@ -254,7 +269,7 @@ export default function ProductCard({
       </Link>
 
       <CardHeader className='pb-2'>
-        <CardTitle className='text-base line-clamp-2 group-hover:text-primary transition-colors'>
+        <CardTitle className='text-base line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors'>
           {product.name}
         </CardTitle>
 
@@ -287,7 +302,7 @@ export default function ProductCard({
         {/* Price */}
         <div className='space-y-1'>
           <div className='flex items-center gap-2'>
-            <span className='text-lg font-semibold text-primary'>
+            <span className='text-lg font-semibold text-purple-600 dark:text-purple-400'>
               {product.price.toLocaleString('vi-VN')}₫
             </span>
             {hasDiscount && (
@@ -318,7 +333,11 @@ export default function ProductCard({
         <Button
           onClick={handleAddToCart}
           disabled={isOutOfStock}
-          className='w-full mt-2'
+          className={`w-full mt-2 ${
+            !isOutOfStock
+              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200'
+              : ''
+          }`}
           variant={isOutOfStock ? 'secondary' : 'default'}
           size='sm'
         >
@@ -327,4 +346,6 @@ export default function ProductCard({
       </CardContent>
     </Card>
   )
-}
+})
+
+export default ProductCard

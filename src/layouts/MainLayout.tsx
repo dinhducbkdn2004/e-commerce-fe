@@ -53,7 +53,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   console.log('Auth status:', { isAuthenticated, pathname: location.pathname })
 
   return (
-    <div className='min-h-screen flex flex-col bg-white dark:bg-gray-900'>
+    <div className='min-h-screen flex flex-col bg-main-gradient dark:bg-gray-900'>
       <ProgressBar />
       {!isFullViewport && <Header />}
       <main className={`flex-1 ${getMainPadding()}`}>{children}</main>

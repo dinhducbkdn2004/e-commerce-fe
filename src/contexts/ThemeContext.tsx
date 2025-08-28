@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -35,6 +35,9 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
+    // Add transitioning class to optimize performance
+    root.classList.add('theme-transitioning')
+
     root.classList.remove('light', 'dark')
 
     if (theme === 'system') {
@@ -44,19 +47,27 @@ export function ThemeProvider({
         : 'light'
 
       root.classList.add(systemTheme)
-      return
+    } else {
+      root.classList.add(theme)
     }
 
-    root.classList.add(theme)
+    // Remove transitioning class after theme is applied
+    const timer = setTimeout(() => {
+      root.classList.remove('theme-transitioning')
+    }, 50)
+
+    return () => clearTimeout(timer)
   }, [theme])
 
-  const value = {
+  const handleSetTheme = useCallback((theme: Theme) => {
+    localStorage.setItem(storageKey, theme)
+    setTheme(theme)
+  }, [storageKey])
+
+  const value = useMemo(() => ({
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
-  }
+    setTheme: handleSetTheme,
+  }), [theme, handleSetTheme])
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

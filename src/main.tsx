@@ -15,6 +15,16 @@ try {
   console.error('Failed to validate environment variables:', error)
 }
 
+// Add preload class to prevent transition flash on initial load
+document.documentElement.classList.add('preload')
+
+// Remove preload class after initial render
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.documentElement.classList.remove('preload')
+  }, 100)
+})
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>

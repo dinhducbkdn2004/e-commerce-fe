@@ -3,17 +3,17 @@ import { Button } from '@/components/ui/button'
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import {
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Heart,
-  ShoppingBag,
-  Star,
+    ArrowRight,
+    ChevronLeft,
+    ChevronRight,
+    Heart,
+    ShoppingBag,
+    Star,
 } from 'lucide-react'
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function FavoritesSection() {
+function FavoritesSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, slidesToScroll: 1 },
     [Autoplay({ delay: 3000, stopOnInteraction: true })]
@@ -285,3 +285,5 @@ export default function FavoritesSection() {
     </section>
   )
 }
+
+export default memo(FavoritesSection)

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
-import { Component, ErrorInfo, ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 
 interface Props {
   children: ReactNode
@@ -85,4 +85,3 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 export default ErrorBoundary
-

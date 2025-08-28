@@ -8,8 +8,8 @@ import SortSelect from '@/components/SortSelect'
 import { Button } from '@/components/ui/button'
 import { useDebounce } from '@/hooks/useDebounce'
 import {
-    productService,
-    type GetProductsParams,
+  productService,
+  type GetProductsParams,
 } from '@/services/productService'
 import type { ProductDTO } from '@/types/product'
 import { AlertCircle, Grid, List } from 'lucide-react'
@@ -24,7 +24,6 @@ export default function ProductListingPage() {
   const [error, setError] = useState<string | null>(null)
   const [total, setTotal] = useState<number>(0)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   // URL params
   const page = parseInt(searchParams.get('page') || '1')

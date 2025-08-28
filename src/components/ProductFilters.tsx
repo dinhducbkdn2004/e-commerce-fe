@@ -4,15 +4,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select'
 import { useEffect, useState } from 'react'
 import SearchInput from './SearchInput'
 import SortSelect from './SortSelect'
+
+// Types for category API response
+interface Category {
+  _id: string
+  name: string
+  slug: string
+  isActive: boolean
+  level: number
+}
+
+interface CategoryApiResponse {
+  success: boolean
+  data: Category[]
+}
 
 interface ProductFiltersProps {
   onFilterChange: (filters: {
@@ -43,7 +57,9 @@ export default function ProductFilters({
   onClearFilters,
   totalProducts = 0,
 }: ProductFiltersProps) {
-  const [categories, setCategories] = useState<Array<{id: string, name: string, slug: string}>>([])
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string; slug: string }>
+  >([])
   const [loadingCategories, setLoadingCategories] = useState(false)
   const [localFilters, setLocalFilters] = useState({
     minPrice: currentFilters.minPrice || '',
@@ -55,16 +71,17 @@ export default function ProductFilters({
     const loadCategories = async () => {
       setLoadingCategories(true)
       try {
-        const response = await categoriesApi.getCategories()
+        const response =
+          (await categoriesApi.getCategories()) as CategoryApiResponse
         if (response.success && response.data) {
           // Filter only active root categories
-          const activeCategories = response.data.filter((cat: any) =>
-            cat.isActive && cat.level === 0
-          ).map((cat: any) => ({
-            id: cat._id,
-            name: cat.name,
-            slug: cat.slug
-          }))
+          const activeCategories = response.data
+            .filter((cat: Category) => cat.isActive && cat.level === 0)
+            .map((cat: Category) => ({
+              id: cat._id,
+              name: cat.name,
+              slug: cat.slug,
+            }))
           setCategories(activeCategories)
         }
       } catch (error) {
@@ -158,12 +175,25 @@ export default function ProductFilters({
             disabled={loadingCategories}
           >
             <SelectTrigger className='border-purple-300/60 dark:border-purple-600 focus:ring-purple-500/50 dark:focus:ring-purple-400 bg-white/95 dark:bg-gray-800/95 text-gray-700 dark:text-gray-200'>
-              <SelectValue placeholder={loadingCategories ? 'Đang tải...' : 'Chọn danh mục'} />
+              <SelectValue
+                placeholder={
+                  loadingCategories ? 'Đang tải...' : 'Chọn danh mục'
+                }
+              />
             </SelectTrigger>
             <SelectContent className='border-purple-300/60 dark:border-purple-600 bg-white/98 dark:bg-gray-800/95'>
-              <SelectItem value='all' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>Tất cả danh mục</SelectItem>
+              <SelectItem
+                value='all'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                Tất cả danh mục
+              </SelectItem>
               {categories.map(category => (
-                <SelectItem key={category.id} value={category.slug} className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>
+                <SelectItem
+                  key={category.id}
+                  value={category.slug}
+                  className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+                >
                   {category.name}
                 </SelectItem>
               ))}
@@ -182,12 +212,42 @@ export default function ProductFilters({
               <SelectValue placeholder='Chọn đánh giá' />
             </SelectTrigger>
             <SelectContent className='border-purple-300/60 dark:border-purple-600 bg-white/98 dark:bg-gray-800/95'>
-              <SelectItem value='all' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>Tất cả đánh giá</SelectItem>
-              <SelectItem value='5' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>⭐⭐⭐⭐⭐ 5 sao</SelectItem>
-              <SelectItem value='4' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>⭐⭐⭐⭐ 4 sao trở lên</SelectItem>
-              <SelectItem value='3' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>⭐⭐⭐ 3 sao trở lên</SelectItem>
-              <SelectItem value='2' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>⭐⭐ 2 sao trở lên</SelectItem>
-              <SelectItem value='1' className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'>⭐ 1 sao trở lên</SelectItem>
+              <SelectItem
+                value='all'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                Tất cả đánh giá
+              </SelectItem>
+              <SelectItem
+                value='5'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                ⭐⭐⭐⭐⭐ 5 sao
+              </SelectItem>
+              <SelectItem
+                value='4'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                ⭐⭐⭐⭐ 4 sao trở lên
+              </SelectItem>
+              <SelectItem
+                value='3'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                ⭐⭐⭐ 3 sao trở lên
+              </SelectItem>
+              <SelectItem
+                value='2'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                ⭐⭐ 2 sao trở lên
+              </SelectItem>
+              <SelectItem
+                value='1'
+                className='hover:bg-purple-100/80 dark:hover:bg-purple-900/20 text-gray-700 dark:text-gray-200'
+              >
+                ⭐ 1 sao trở lên
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

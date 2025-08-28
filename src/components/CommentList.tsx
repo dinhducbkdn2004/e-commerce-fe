@@ -57,6 +57,7 @@ export default function CommentList({
 
       // Here you would typically send to your API
       // await commentService.addComment(productId, comment)
+      console.log('Adding comment for product:', productId)
     } catch (error) {
       console.error('Error adding comment:', error)
       toast.error('Có lỗi xảy ra khi thêm bình luận')
@@ -311,4 +312,3 @@ export default function CommentList({
     </div>
   )
 }
-
